@@ -63,52 +63,6 @@ http://127.0.0.1:4173
 
 也可以直接打开 `index.html`，但为了保证图片、缓存和导出行为更稳定，仍然建议通过本地静态服务预览。
 
-## 自定义入口
-
-主要自定义都集中在 [`index.html`](./index.html)。
-
-### 1. 修改站点品牌信息
-
-编辑 `SITE_CONFIG`：
-
-```js
-const SITE_CONFIG = {
-  documentTitle: '我的 SBTI 版本',
-  introTitle: '这是我的 SBTI 版本。',
-  versionOwner: '当前版本：你的自定义版',
-  deployInfo: '托管：待替换为你的部署平台',
-  domainInfo: '域名：待替换为你的域名'
-};
-```
-
-可调整内容：
-
-- 页面标题
-- 首页主标题
-- 当前版本标识
-- 托管信息
-- 域名信息
-
-### 2. 修改题目内容
-
-编辑 [`index.html`](./index.html) 中的：
-
-- `questions`
-- `specialQuestions`
-
-### 3. 修改人格结果与文案
-
-编辑 [`index.html`](./index.html) 中的：
-
-- `TYPE_LIBRARY`
-- `NORMAL_TYPES`
-- `TYPE_IMAGES`
-- `DIM_EXPLANATIONS`
-
-### 4. 替换结果图
-
-将对应图片替换到 [`image`](./image) 目录，并保持文件名与 `TYPE_IMAGES` 中的映射一致。
-
 ## 部署方式
 
 本项目没有构建步骤，部署时直接发布仓库根目录即可。
