@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#4d6a53" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="我的 SBTI 版本" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
   <title>我的 SBTI 版本</title>
   <style>
     :root {
@@ -20,6 +27,7 @@
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       background:
@@ -31,7 +39,11 @@
     .shell {
       max-width: 980px;
       margin: 0 auto;
-      padding: 24px 16px 56px;
+      padding:
+        calc(24px + env(safe-area-inset-top))
+        calc(16px + env(safe-area-inset-right))
+        calc(56px + env(safe-area-inset-bottom))
+        calc(16px + env(safe-area-inset-left));
     }
 
     .card {
@@ -140,12 +152,30 @@
       justify-content: center;
       margin-top: 28px;
     }
+    .install-panel {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fbfefb, #f4f9f5);
+      max-width: 720px;
+    }
+    .install-panel h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .install-panel p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
 
     button {
       border: 0;
       cursor: pointer;
       transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
       font: inherit;
+      max-width: 100%;
     }
 
     button:hover { transform: translateY(-1px); }
@@ -519,6 +549,7 @@
       line-height: 1.8;
       position: relative;
       z-index: 1;
+      overflow-wrap: anywhere;
     }
     .type-kicker {
       font-size: 12px;
@@ -536,6 +567,7 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
+      overflow-wrap: anywhere;
     }
     .match {
       margin-top: 18px;
@@ -550,10 +582,17 @@
       font-weight: 700;
       font-size: 14px;
       line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
     .analysis-box h3, .dim-box h3, .note-box h3 {
       font-size: 16px;
       margin-bottom: 12px;
+    }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
     }
     .result-actions {
       margin-top: 22px;
@@ -602,10 +641,172 @@
       font-size: 13px;
       line-height: 1.8;
     }
+    .metric-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #edf3ee;
+      overflow: hidden;
+      margin: 10px 0 10px;
+    }
+    .metric-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9ab89e, #4d6a53);
+    }
+    .score-item .hint,
+    .top3-item .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+    .why-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+    .why-box h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .why-list {
+      display: grid;
+      gap: 12px;
+    }
+    .why-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+    .why-item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .why-item strong {
+      font-size: 14px;
+      color: var(--text);
+    }
+    .why-item span {
+      font-size: 12px;
+      color: var(--accent-strong);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .why-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
     .note-box p {
       margin: 0;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.8;
+    }
+    .library-wrap {
+      margin-top: 22px;
+      padding: 22px;
+    }
+    .library-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .library-header h2 {
+      font-size: clamp(28px, 5vw, 40px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-top: 8px;
+    }
+    .library-sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 720px;
+      margin-top: 10px;
+    }
+    .library-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-content: start;
+    }
+    .library-card,
+    .library-detail {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+    .library-card {
+      padding: 16px;
+      text-align: left;
+      width: 100%;
+    }
+    .library-card.is-active {
+      border-color: #97b59c;
+      box-shadow: 0 12px 30px rgba(77, 106, 83, 0.12);
+      background: linear-gradient(180deg, #fdfefd, #f5faf6);
+    }
+    .library-card .kicker {
+      font-size: 11px;
+      color: var(--accent-strong);
+      margin-bottom: 8px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .library-card strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .library-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .library-detail {
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+    .library-detail-top {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+    .library-detail-image {
+      width: 100%;
+      border-radius: 18px;
+      background: #fff;
+      object-fit: contain;
+      min-height: 180px;
+      max-height: 280px;
+      border: 1px solid var(--line);
+    }
+    .library-detail-copy p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
       line-height: 1.8;
     }
 
@@ -626,6 +827,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      overflow-wrap: anywhere;
     }
     .author-box summary::-webkit-details-marker { display: none; }
     .author-box summary::after {
@@ -667,12 +869,16 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
+      overflow-wrap: anywhere;
     }
     .action-status.is-error {
       color: #9f3f3f;
     }
     @media (max-width: 860px) {
-      .result-top { grid-template-columns: 1fr; }
+      .result-top,
+      .insight-grid,
+      .library-layout,
+      .library-detail-top { grid-template-columns: 1fr; }
     }
 
 @media (max-width: 860px) {
@@ -680,14 +886,23 @@
       .result-hero {
         grid-template-columns: 1fr;
       }
+      .library-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .dim-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 600px) {
-      .shell { padding: 14px 12px 42px; }
+      .shell {
+        padding:
+          calc(14px + env(safe-area-inset-top))
+          calc(12px + env(safe-area-inset-right))
+          calc(42px + env(safe-area-inset-bottom))
+          calc(12px + env(safe-area-inset-left));
+      }
       .hero, .test-wrap, .result-wrap { padding: 16px; }
+      .library-wrap { padding: 16px; }
       .hero h1 { font-size: 32px; }
       .question-title { font-size: 15px; }
+      .library-grid { grid-template-columns: 1fr; }
       .dim-grid,
       .score-grid { grid-template-columns: 1fr; }
     }
@@ -700,6 +915,12 @@
         <h1 id="introTitle">这是我的 SBTI 版本。</h1>
         <div class="hero-actions hero-actions-single">
           <button id="startBtn" class="btn-primary">开始测试</button>
+          <button id="openLibraryBtn" class="btn-secondary">人格图鉴</button>
+          <button id="installBtn" class="btn-secondary" hidden>添加到主屏幕</button>
+        </div>
+        <div class="install-panel">
+          <h3>把它装到主屏幕</h3>
+          <p id="installText">首次打开后会缓存核心静态资源；支持安装的浏览器会显示安装按钮，iPhone Safari 可通过“分享”添加到主屏幕。</p>
         </div>
         <div style="padding-top: 2rem; display: flex; flex-direction: column;">
           <span id="versionOwner">
@@ -715,6 +936,40 @@
           <span id="domainInfo">
             域名：待替换为你的域名
           </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="library" class="screen">
+      <div class="library-wrap card">
+        <div class="library-header">
+          <div>
+            <div class="eyebrow">Personality Index</div>
+            <h2>人格图鉴 / 类型百科</h2>
+            <p class="library-sub">不用重做测试，也能先把所有人格设定翻一遍。点击左侧任意人格，会在右边展开完整介绍。</p>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="libraryStartBtn" class="btn-primary">开始测试</button>
+            <button id="libraryBackBtn" class="btn-secondary">回到首页</button>
+          </div>
+        </div>
+        <div class="library-layout">
+          <div id="libraryGrid" class="library-grid"></div>
+          <div class="library-detail">
+            <div class="library-detail-top">
+              <img id="libraryImage" class="library-detail-image" alt="人格图鉴插图" />
+              <div class="library-detail-copy">
+                <div class="type-kicker" id="libraryTypeKicker">标准人格</div>
+                <div class="type-name" id="libraryTypeName">CTRL（拿捏者）</div>
+                <div class="match" id="libraryTypeMeta">模板人格</div>
+                <p id="libraryTypeIntro">人格图鉴会在这里显示该类型的一句话印象。</p>
+              </div>
+            </div>
+            <div class="analysis-box">
+              <h3>完整设定</h3>
+              <p id="libraryTypeDesc"></p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -761,8 +1016,25 @@
             <p id="resultDesc"></p>
           </div>
 
+          <div class="insight-grid">
+            <div class="score-box">
+              <h3>五大模型总览</h3>
+              <div id="modelSummary" class="score-grid"></div>
+            </div>
+
+            <div class="top3-box">
+              <h3>最接近的 3 个人格</h3>
+              <div id="top3List" class="top3-list"></div>
+            </div>
+          </div>
+
+          <div class="why-box">
+            <h3>你为什么会是这个类型</h3>
+            <div id="whyList" class="why-list"></div>
+          </div>
+
           <div class="dim-box">
-            <h3>十五维度评分</h3>
+            <h3>十五维度条形图与解释</h3>
             <div id="dimList" class="dim-list"></div>
           </div>
 
@@ -785,6 +1057,7 @@
         <div class="result-actions">
           <div id="exportStatus" class="action-status" aria-live="polite"></div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="resultLibraryBtn" class="btn-secondary">人格图鉴</button>
             <button id="saveImageBtn" class="btn-secondary">保存结果长图</button>
             <button id="restartBtn" class="btn-secondary">重新测试</button>
             <button id="toTopBtn" class="btn-primary">回到首页</button>
@@ -1497,19 +1770,36 @@
   }
 };
     const dimensionOrder = ['S1','S2','S3','E1','E2','E3','A1','A2','A3','Ac1','Ac2','Ac3','So1','So2','So3'];
+    const LEVEL_LABELS = { L: '偏低', M: '中段', H: '偏高' };
+    const MODEL_GROUPS = [
+      { key: 'self', name: '自我模型', dims: ['S1', 'S2', 'S3'] },
+      { key: 'emotion', name: '情感模型', dims: ['E1', 'E2', 'E3'] },
+      { key: 'attitude', name: '态度模型', dims: ['A1', 'A2', 'A3'] },
+      { key: 'action', name: '行动驱力', dims: ['Ac1', 'Ac2', 'Ac3'] },
+      { key: 'social', name: '社交模型', dims: ['So1', 'So2', 'So3'] }
+    ];
+    const TYPE_PATTERN_TEXT = Object.fromEntries(NORMAL_TYPES.map((type) => [type.code, type.pattern]));
+    const TYPE_PATTERN_MAP = Object.fromEntries(NORMAL_TYPES.map((type) => [type.code, parsePattern(type.pattern)]));
+    const LIBRARY_TYPE_CODES = [
+      ...NORMAL_TYPES.map((type) => type.code),
+      ...Object.keys(TYPE_LIBRARY).filter((code) => !NORMAL_TYPES.some((type) => type.code === code))
+    ];
 
     const DRUNK_TRIGGER_QUESTION_ID = 'drink_gate_q2';
+    let deferredInstallPrompt = null;
 
     const app = {
       shuffledQuestions: [],
       answers: {},
       previewMode: false,
       restoredFromCache: false,
-      lastResult: null
+      lastResult: null,
+      activeLibraryCode: LIBRARY_TYPE_CODES[0]
     };
 
     const screens = {
       intro: document.getElementById('intro'),
+      library: document.getElementById('library'),
       test: document.getElementById('test'),
       result: document.getElementById('result')
     };
@@ -1522,6 +1812,18 @@
     const resultCapture = document.getElementById('resultCapture');
     const saveImageBtn = document.getElementById('saveImageBtn');
     const exportStatus = document.getElementById('exportStatus');
+    const modelSummary = document.getElementById('modelSummary');
+    const top3List = document.getElementById('top3List');
+    const whyList = document.getElementById('whyList');
+    const libraryGrid = document.getElementById('libraryGrid');
+    const libraryImage = document.getElementById('libraryImage');
+    const libraryTypeKicker = document.getElementById('libraryTypeKicker');
+    const libraryTypeName = document.getElementById('libraryTypeName');
+    const libraryTypeMeta = document.getElementById('libraryTypeMeta');
+    const libraryTypeIntro = document.getElementById('libraryTypeIntro');
+    const libraryTypeDesc = document.getElementById('libraryTypeDesc');
+    const installBtn = document.getElementById('installBtn');
+    const installText = document.getElementById('installText');
 
     function applySiteConfig() {
       document.title = SITE_CONFIG.documentTitle;
@@ -1529,11 +1831,30 @@
       document.getElementById('versionOwner').textContent = SITE_CONFIG.versionOwner;
       document.getElementById('deployInfo').textContent = SITE_CONFIG.deployInfo;
       document.getElementById('domainInfo').textContent = SITE_CONFIG.domainInfo;
+      const mobileTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+      if (mobileTitle) mobileTitle.setAttribute('content', SITE_CONFIG.documentTitle);
     }
 
     function setActionStatus(message = '', isError = false) {
       exportStatus.textContent = message;
       exportStatus.classList.toggle('is-error', Boolean(message) && isError);
+    }
+
+    function updateUrlState(params = {}) {
+      const url = new URL(window.location.href);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === '') {
+          url.searchParams.delete(key);
+        } else {
+          url.searchParams.set(key, value);
+        }
+      });
+      const query = url.searchParams.toString();
+      window.history.replaceState({}, '', `${url.pathname}${query ? `?${query}` : ''}${url.hash}`);
+    }
+
+    function getCurrentUrlParams() {
+      return new URLSearchParams(window.location.search);
     }
 
     function normalizeAnswers(answers) {
@@ -1554,10 +1875,19 @@
       return questionIds.map((questionId) => QUESTION_MAP[questionId]).filter(Boolean);
     }
 
-    function showScreen(name) {
+    function showScreen(name, options = {}) {
+      const { syncUrl = true, type = null } = options;
       Object.entries(screens).forEach(([key, el]) => {
         el.classList.toggle('active', key === name);
       });
+      if (syncUrl) {
+        updateUrlState({
+          screen: name === 'intro' ? null : name,
+          type: (name === 'library' || name === 'result')
+            ? (type || app.activeLibraryCode || app.lastResult?.finalType?.code || null)
+            : null
+        });
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1582,6 +1912,147 @@
     function getQuestionMetaLabel(q) {
       if (q.special) return '补充题';
       return app.previewMode ? dimensionMeta[q.dim].name : '维度已隐藏';
+    }
+
+    function getLevelText(level) {
+      return LEVEL_LABELS[level] || level;
+    }
+
+    function scoreToPercent(score, max = 6, min = 2) {
+      return Math.max(0, Math.min(100, ((score - min) / (max - min)) * 100));
+    }
+
+    function getTypeDescriptor(code) {
+      const type = TYPE_LIBRARY[code];
+      if (!type) return null;
+      const isNormal = Boolean(TYPE_PATTERN_TEXT[code]);
+      return {
+        ...type,
+        isNormal,
+        pattern: TYPE_PATTERN_TEXT[code] || null,
+        kicker: isNormal ? '标准人格' : '特殊人格',
+        meta: isNormal ? `模板 ${TYPE_PATTERN_TEXT[code]}` : '隐藏 / 彩蛋 / 兜底人格'
+      };
+    }
+
+    function renderLibraryGrid() {
+      libraryGrid.innerHTML = LIBRARY_TYPE_CODES.map((code) => {
+        const type = getTypeDescriptor(code);
+        const activeClass = code === app.activeLibraryCode ? ' is-active' : '';
+        return `
+          <button class="library-card${activeClass}" type="button" data-type-code="${code}">
+            <div class="kicker">${type.kicker}</div>
+            <strong>${type.code}（${type.cn}）</strong>
+            <p>${type.intro}</p>
+          </button>
+        `;
+      }).join('');
+
+      libraryGrid.querySelectorAll('[data-type-code]').forEach((button) => {
+        button.addEventListener('click', () => {
+          setLibraryType(button.dataset.typeCode, { syncUrl: true });
+        });
+      });
+    }
+
+    function renderLibraryDetail(code) {
+      const type = getTypeDescriptor(code);
+      if (!type) return;
+
+      libraryTypeKicker.textContent = type.kicker;
+      libraryTypeName.textContent = `${type.code}（${type.cn}）`;
+      libraryTypeMeta.textContent = type.meta;
+      libraryTypeIntro.textContent = type.intro;
+      libraryTypeDesc.textContent = type.desc;
+
+      const imageSrc = TYPE_IMAGES[type.code];
+      if (imageSrc) {
+        libraryImage.src = imageSrc;
+        libraryImage.alt = `${type.code}（${type.cn}）`;
+        libraryImage.style.display = 'block';
+      } else {
+        libraryImage.removeAttribute('src');
+        libraryImage.alt = '';
+        libraryImage.style.display = 'none';
+      }
+    }
+
+    function setLibraryType(code, options = {}) {
+      const { syncUrl = false } = options;
+      if (!TYPE_LIBRARY[code]) return;
+      app.activeLibraryCode = code;
+      renderLibraryGrid();
+      renderLibraryDetail(code);
+      if (syncUrl && screens.library.classList.contains('active')) {
+        updateUrlState({ screen: 'library', type: code });
+      }
+    }
+
+    function openLibrary(code = app.lastResult?.finalType?.code || app.activeLibraryCode || LIBRARY_TYPE_CODES[0], options = {}) {
+      const { syncUrl = true } = options;
+      setLibraryType(code, { syncUrl: false });
+      showScreen('library', { syncUrl, type: code });
+    }
+
+    function isStandaloneMode() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    }
+
+    function isIosSafari() {
+      const ua = window.navigator.userAgent;
+      return /iphone|ipad|ipod/i.test(ua) && /safari/i.test(ua) && !/crios|fxios|edgios/i.test(ua);
+    }
+
+    function updateInstallUi() {
+      if (isStandaloneMode()) {
+        installBtn.hidden = true;
+        installText.textContent = '已经可以像 App 一样从主屏幕打开了，离线时也能继续进入测试和图鉴。';
+        return;
+      }
+      if (deferredInstallPrompt) {
+        installBtn.hidden = false;
+        installText.textContent = '你的浏览器支持安装。点按钮就能把它放到主屏幕，像应用一样打开。';
+        return;
+      }
+      installBtn.hidden = true;
+      installText.textContent = isIosSafari()
+        ? '在 iPhone 的 Safari 里点击底部“分享”，再选择“添加到主屏幕”，以后就能像 App 一样打开。'
+        : '首次打开后会缓存核心静态资源。支持安装的浏览器会在这里显示“添加到主屏幕”按钮。';
+    }
+
+    async function installApp() {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      try {
+        await deferredInstallPrompt.userChoice;
+      } catch (error) {
+        console.warn('安装提示交互未完成', error);
+      }
+      deferredInstallPrompt = null;
+      updateInstallUi();
+    }
+
+    function registerPwa() {
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        updateInstallUi();
+      });
+
+      window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+        updateInstallUi();
+      });
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+            console.warn('Service Worker 注册失败', error);
+          });
+        });
+      }
+
+      updateInstallUi();
     }
 
     function isSessionComplete() {
@@ -1797,6 +2268,98 @@
       };
     }
 
+    function renderModelSummary(result) {
+      modelSummary.innerHTML = MODEL_GROUPS.map((group) => {
+        const scores = group.dims.map((dim) => result.rawScores[dim]);
+        const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+        const strongestDim = group.dims.reduce((best, dim) => {
+          if (!best) return dim;
+          return result.rawScores[dim] > result.rawScores[best] ? dim : best;
+        }, null);
+
+        return `
+          <div class="score-item">
+            <div class="k">${group.name}</div>
+            <div class="v">${average.toFixed(1)} / 6</div>
+            <div class="metric-bar"><span style="width:${scoreToPercent(average)}%"></span></div>
+            <div class="hint">最突出：${dimensionMeta[strongestDim].name}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getWhyReasons(result) {
+      const reasons = [];
+      const referenceType = result.secondaryType || result.bestNormal || result.finalType;
+      const pattern = TYPE_PATTERN_MAP[referenceType.code] || [];
+
+      if (result.finalType.code === 'DRUNK') {
+        reasons.push({
+          title: '饮酒补充题触发了隐藏人格',
+          badge: '隐藏机制命中',
+          body: `你在补充题里命中了“酒精异常因子”，所以系统直接切到 DRUNK。即便按常规人格来算，你最接近的依然是 ${referenceType.code}（${referenceType.cn}）。`
+        });
+      } else if (result.finalType.code === 'HHHH') {
+        reasons.push({
+          title: '标准人格库没有完全接住你',
+          badge: `最高仅 ${result.bestNormal.similarity}%`,
+          body: `你的 15 维画像没有明显落到某个标准模板上，所以系统启用了 HHHH 兜底。离你最近的常规类型是 ${referenceType.code}（${referenceType.cn}）。`
+        });
+      }
+
+      const dimensionReasons = dimensionOrder.map((dim, index) => {
+        const actualLevel = result.levels[dim];
+        const targetLevel = pattern[index] || actualLevel;
+        const score = result.rawScores[dim];
+        const idealScore = { L: 2, M: 4, H: 6 }[targetLevel];
+        const diff = Math.abs(levelNum(actualLevel) - levelNum(targetLevel));
+        const confidence = 10 - diff * 4 - Math.abs(score - idealScore);
+
+        return {
+          title: dimensionMeta[dim].name,
+          badge: `你是 ${actualLevel}（${score}分） · 模板 ${targetLevel}`,
+          body: `${DIM_EXPLANATIONS[dim][actualLevel]} 这一维与你的目标类型画像高度贴合。`,
+          diff,
+          confidence
+        };
+      }).sort((a, b) => {
+        if (a.diff !== b.diff) return a.diff - b.diff;
+        return b.confidence - a.confidence;
+      });
+
+      return [...reasons, ...dimensionReasons].slice(0, 4);
+    }
+
+    function renderWhyList(result) {
+      whyList.innerHTML = getWhyReasons(result).map((reason) => `
+        <div class="why-item">
+          <div class="why-item-top">
+            <strong>${reason.title}</strong>
+            <span>${reason.badge}</span>
+          </div>
+          <p>${reason.body}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTop3List(result) {
+      const top3Title = document.querySelector('.top3-box h3');
+      if (top3Title) {
+        top3Title.textContent = result.special ? '常规人格里最接近的 3 个类型' : '最接近的 3 个人格';
+      }
+
+      top3List.innerHTML = result.ranked.slice(0, 3).map((type, index) => `
+        <div class="top3-item">
+          <div>
+            <strong>No.${index + 1} · ${type.code}（${type.cn}）</strong>
+            <span>${type.intro}</span>
+            <div class="hint">精准命中 ${type.exact}/15 维</div>
+          </div>
+          <div class="top3-score">${type.similarity}%</div>
+        </div>
+      `).join('');
+    }
+
     function renderDimList(result) {
       const dimList = document.getElementById('dimList');
       dimList.innerHTML = dimensionOrder.map(dim => {
@@ -1805,9 +2368,13 @@
         return `
           <div class="dim-item">
             <div class="dim-item-top">
-              <div class="dim-item-name">${dimensionMeta[dim].name}</div>
+              <div>
+                <div class="dim-item-name">${dimensionMeta[dim].name}</div>
+                <div class="hint">${dimensionMeta[dim].model}</div>
+              </div>
               <div class="dim-item-score">${level} / ${result.rawScores[dim]}分</div>
             </div>
+            <div class="metric-bar"><span style="width:${scoreToPercent(result.rawScores[dim])}%"></span></div>
             <p>${explanation}</p>
           </div>
         `;
@@ -1930,6 +2497,9 @@
         posterBox.classList.add('no-image');
       }
 
+      renderModelSummary(result);
+      renderTop3List(result);
+      renderWhyList(result);
       renderDimList(result);
       persistAppState();
       setActionStatus(
@@ -1937,10 +2507,11 @@
           ? '已恢复上次测试结果，可直接继续查看或保存长图。'
           : '结果已保存在当前浏览器，下次打开还能继续查看。'
       );
-      showScreen('result');
+      showScreen('result', { type: type.code });
     }
 
-    function startTest(preview = false) {
+    function startTest(preview = false, options = {}) {
+      const { syncUrl = true } = options;
       app.previewMode = preview;
       app.restoredFromCache = false;
       app.lastResult = null;
@@ -1953,18 +2524,46 @@
         ...shuffledRegular.slice(insertIndex)
       ];
       renderQuestions();
-      showScreen('test');
+      showScreen('test', { syncUrl });
+    }
+
+    function applyInitialRoute() {
+      const params = getCurrentUrlParams();
+      const screen = params.get('screen');
+      const type = params.get('type');
+
+      if (screen === 'library') {
+        openLibrary(type && TYPE_LIBRARY[type] ? type : app.activeLibraryCode, { syncUrl: false });
+        return true;
+      }
+      if (screen === 'test') {
+        startTest(false, { syncUrl: false });
+        return true;
+      }
+      return false;
     }
 
     applySiteConfig();
-    restoreAppState();
+    renderLibraryGrid();
+    renderLibraryDetail(app.activeLibraryCode);
+    registerPwa();
+
+    const routed = applyInitialRoute();
+    if (!routed) {
+      restoreAppState();
+    }
 
     document.getElementById('startBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('openLibraryBtn').addEventListener('click', () => openLibrary());
+    document.getElementById('libraryStartBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('libraryBackBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('submitBtn').addEventListener('click', renderResult);
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
     document.getElementById('toTopBtn').addEventListener('click', () => showScreen('intro'));
+    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code));
     saveImageBtn.addEventListener('click', downloadResultImage);
+    installBtn.addEventListener('click', installApp);
   </script>
 
 </body>
