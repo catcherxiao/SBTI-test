@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sbti-static-v1';
+const CACHE_NAME = 'sbti-static-v2';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const CORE_ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
+  './icons/share-qr.png',
   './image/ATM-er.png',
   './image/BOSS.png',
   './image/CTRL.png',

@@ -9,6 +9,7 @@ logs
 .DS_Store
 .fleet
 .idea
+share-preview*.png
 
 # Local env files
 .env

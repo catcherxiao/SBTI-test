@@ -496,6 +496,10 @@
       display: grid;
       gap: 18px;
     }
+    .result-share {
+      display: grid;
+      gap: 18px;
+    }
     .result-top {
       display: grid;
       grid-template-columns: 0.9fr 1.1fr;
@@ -595,9 +599,10 @@
       gap: 18px;
     }
     .result-actions {
-      margin-top: 22px;
-      display: flex;
-      justify-content: flex-end;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #f8fcf9);
     }
     .analysis-box p {
       margin: 0;
@@ -710,6 +715,93 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.8;
+    }
+    .result-divider {
+      display: grid;
+      gap: 14px;
+      padding-top: 6px;
+    }
+    .result-divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(180, 204, 185, 0), rgba(180, 204, 185, 0.95), rgba(180, 204, 185, 0));
+    }
+    .result-divider-copy {
+      text-align: center;
+      display: grid;
+      gap: 6px;
+    }
+    .result-divider-copy strong {
+      font-size: 16px;
+      color: var(--accent-strong);
+    }
+    .result-divider-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .result-detail-lead {
+      border: 1px dashed #bfd2c4;
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fcfffc, #f4faf5);
+      display: grid;
+      gap: 8px;
+    }
+    .result-detail-lead strong {
+      font-size: 16px;
+      color: var(--text);
+    }
+    .result-detail-lead p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .share-footer {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #f7fbf8);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 132px;
+      gap: 18px;
+      align-items: center;
+    }
+    .share-footer-copy {
+      display: grid;
+      gap: 8px;
+    }
+    .share-footer-copy strong {
+      font-size: 20px;
+      color: var(--accent-strong);
+    }
+    .share-footer-copy p,
+    .share-footer-copy span {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .share-footer-copy p {
+      font-size: 14px;
+    }
+    .share-footer-copy span {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .share-qr-frame {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 10px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+    }
+    .share-qr-image {
+      width: 100%;
+      max-width: 112px;
+      border-radius: 12px;
+      display: block;
     }
     .library-wrap {
       margin-top: 22px;
@@ -856,20 +948,27 @@
     }
 
     .result-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid;
+      gap: 14px;
+      margin-top: 0;
+    }
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 22px;
+    }
+    .action-buttons button {
+      width: 100%;
+      min-height: 60px;
+      font-size: 15px;
     }
     .action-status {
-      flex: 1;
-      min-width: 220px;
+      min-width: 0;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
       overflow-wrap: anywhere;
+      text-align: center;
     }
     .action-status.is-error {
       color: #9f3f3f;
@@ -878,7 +977,9 @@
       .result-top,
       .insight-grid,
       .library-layout,
-      .library-detail-top { grid-template-columns: 1fr; }
+      .library-detail-top,
+      .share-footer { grid-template-columns: 1fr; }
+      .action-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
 @media (max-width: 860px) {
@@ -905,6 +1006,8 @@
       .library-grid { grid-template-columns: 1fr; }
       .dim-grid,
       .score-grid { grid-template-columns: 1fr; }
+      .action-buttons { grid-template-columns: 1fr; }
+      .action-buttons button { min-height: 54px; }
     }
   </style>
 </head>
@@ -996,24 +1099,60 @@
     
     <section id="result" class="screen">
       <div class="result-wrap card">
-        <div class="result-layout" id="resultCapture">
-          <div class="result-top">
-            <div class="poster-box" id="posterBox">
-              <img id="posterImage" class="poster-image" alt="人格结果图" />
-              <div id="posterCaption" class="poster-caption">怎么样，被我拿捏了吧？</div>
+        <div class="result-layout">
+          <div class="result-share" id="resultCapture">
+            <div class="result-top">
+              <div class="poster-box" id="posterBox">
+                <img id="posterImage" class="poster-image" alt="人格结果图" />
+                <div id="posterCaption" class="poster-caption">怎么样，被我拿捏了吧？</div>
+              </div>
+
+              <div class="type-box">
+                <div class="type-kicker" id="resultModeKicker">你的主类型</div>
+                <div class="type-name" id="resultTypeName">CTRL（拿捏者）</div>
+                <div class="match" id="matchBadge">匹配度 92%</div>
+                <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
+              </div>
             </div>
 
-            <div class="type-box">
-              <div class="type-kicker" id="resultModeKicker">你的主类型</div>
-              <div class="type-name" id="resultTypeName">CTRL（拿捏者）</div>
-              <div class="match" id="matchBadge">匹配度 92%</div>
-              <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
+            <div class="analysis-box">
+              <h3>该人格的简单解读</h3>
+              <p id="resultDesc"></p>
+            </div>
+
+            <div class="share-footer">
+              <div class="share-footer-copy">
+                <strong>我也测一测</strong>
+                <p>把这张分享图发给朋友时，扫一下底部二维码，就能直接打开同款测试。</p>
+                <span>当前可用入口：49.51.188.49.sslip.io</span>
+              </div>
+              <div class="share-qr-frame">
+                <img class="share-qr-image" src="./icons/share-qr.png" alt="扫描二维码打开测试" />
+              </div>
             </div>
           </div>
 
-          <div class="analysis-box">
-            <h3>该人格的简单解读</h3>
-            <p id="resultDesc"></p>
+          <div class="result-divider">
+            <div class="result-divider-line"></div>
+            <div class="result-divider-copy">
+              <strong>分享图到这里就够了</strong>
+              <p>上半部分适合保存和分享。继续往下看，还有更完整的人格解析、相近人格和十五维度说明。</p>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <div id="exportStatus" class="action-status" aria-live="polite"></div>
+            <div class="action-buttons">
+              <button id="resultLibraryBtn" class="btn-secondary">人格图鉴</button>
+              <button id="saveImageBtn" class="btn-secondary">保存分享图</button>
+              <button id="restartBtn" class="btn-secondary">重新测试</button>
+              <button id="toTopBtn" class="btn-primary">回到首页</button>
+            </div>
+          </div>
+
+          <div class="result-detail-lead">
+            <strong>往下看，是更多人格解析</strong>
+            <p>下面这部分不会进入分享图，主要留给你自己细看，包括五大模型总览、最接近人格、为什么会测出这个类型，以及十五维度条形图。</p>
           </div>
 
           <div class="insight-grid">
@@ -1043,7 +1182,7 @@
             <p id="funNote">本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。</p>
           </div>
 
-                    <details class="author-box">
+          <details class="author-box">
             <summary>作者的话</summary>
             <div class="author-content">
               <p>本测试首发于b站up主蛆肉儿串儿（UID417038183），初衷是劝诫一位爱喝酒的朋友戒酒。</p>
@@ -1052,16 +1191,6 @@
               <p>再鉴于时间精力有限，就随便搞了一个先这样玩玩，后续会慢慢完善修改的，总之好玩为主，还请不要用于盈利呀。</p>
             </div>
           </details>
-        </div>
-
-        <div class="result-actions">
-          <div id="exportStatus" class="action-status" aria-live="polite"></div>
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button id="resultLibraryBtn" class="btn-secondary">人格图鉴</button>
-            <button id="saveImageBtn" class="btn-secondary">保存结果长图</button>
-            <button id="restartBtn" class="btn-secondary">重新测试</button>
-            <button id="toTopBtn" class="btn-primary">回到首页</button>
-          </div>
         </div>
       </div>
     </section>
@@ -1074,7 +1203,7 @@
       documentTitle: '我的 SBTI 版本',
       introTitle: '这是我的 SBTI 版本。',
       versionOwner: '当前版本：你的自定义版',
-      deployInfo: '托管：腾讯云 CVM + Caddy',
+      deployInfo: '',
       domainInfo: '正式域名：sbti.cyou（审核中）；当前可用：https://49.51.188.49.sslip.io'
     };
     const STORAGE_KEY = 'my-sbti-version-state-v1';
@@ -1829,7 +1958,14 @@
       document.title = SITE_CONFIG.documentTitle;
       document.getElementById('introTitle').textContent = SITE_CONFIG.introTitle;
       document.getElementById('versionOwner').textContent = SITE_CONFIG.versionOwner;
-      document.getElementById('deployInfo').textContent = SITE_CONFIG.deployInfo;
+      const deployInfoEl = document.getElementById('deployInfo');
+      if (SITE_CONFIG.deployInfo) {
+        deployInfoEl.textContent = SITE_CONFIG.deployInfo;
+        deployInfoEl.hidden = false;
+      } else {
+        deployInfoEl.textContent = '';
+        deployInfoEl.hidden = true;
+      }
       document.getElementById('domainInfo').textContent = SITE_CONFIG.domainInfo;
       const mobileTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
       if (mobileTitle) mobileTitle.setAttribute('content', SITE_CONFIG.documentTitle);
@@ -2427,12 +2563,12 @@
 
     async function downloadResultImage() {
       if (!app.lastResult) {
-        setActionStatus('先生成一次结果，再保存长图。', true);
+        setActionStatus('先生成一次结果，再保存分享图。', true);
         return;
       }
 
       saveImageBtn.disabled = true;
-      setActionStatus('正在生成长图，请稍等...');
+      setActionStatus('正在生成分享图，请稍等...');
 
       try {
         await waitForImages(resultCapture);
@@ -2459,10 +2595,10 @@
         link.click();
         link.remove();
         URL.revokeObjectURL(downloadUrl);
-        setActionStatus('长图已生成，通常会出现在浏览器默认下载目录。');
+        setActionStatus('分享图已生成，通常会出现在浏览器默认下载目录。');
       } catch (error) {
         console.error(error);
-        setActionStatus('长图生成失败了，刷新页面后再试一次。', true);
+        setActionStatus('分享图生成失败了，刷新页面后再试一次。', true);
       } finally {
         saveImageBtn.disabled = false;
       }
