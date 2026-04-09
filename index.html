@@ -330,6 +330,10 @@
       font-size: 13px;
       line-height: 1.7;
     }
+    .hint.is-error {
+      color: #9f3f3f;
+      font-weight: 700;
+    }
 
     .result-hero {
       display: grid;
@@ -954,7 +958,7 @@
     }
     .action-buttons {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
     .action-buttons button {
@@ -1175,10 +1179,10 @@
         <div id="questionList" class="question-list"></div>
 
         <div class="actions-bottom">
-          <div class="hint" id="testHint">全选完才会放行。世界已经够乱了，起码把题做完整。</div>
+          <div class="hint" id="testHint">没做完也可以先点提交，系统会告诉你还缺哪几题。</div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button id="backIntroBtn" class="btn-secondary">返回首页</button>
-            <button id="submitBtn" class="btn-primary" disabled>提交并查看结果</button>
+            <button id="submitBtn" class="btn-primary">提交并查看结果</button>
           </div>
         </div>
       </div>
@@ -1212,7 +1216,7 @@
               <div class="share-footer-copy">
                 <strong>我也测一测</strong>
                 <p>扫码直达同款测试。</p>
-                <span>正式域名审核中，当前入口见二维码</span>
+                <span>正式入口：sbti.cyou</span>
               </div>
               <div class="share-qr-frame">
                 <img class="share-qr-image" src="./icons/share-qr.png" alt="扫描二维码打开测试" />
@@ -1234,7 +1238,6 @@
               <button id="resultLibraryBtn" class="btn-secondary">人格图鉴</button>
               <button id="saveImageBtn" class="btn-secondary">保存分享图</button>
               <button id="restartBtn" class="btn-secondary">重新测试</button>
-              <button id="toTopBtn" class="btn-primary">回到首页</button>
             </div>
           </div>
 
@@ -1292,7 +1295,7 @@
       introTitle: '这是我的 SBTI 版本。',
       versionOwner: '当前版本：你的自定义版',
       deployInfo: '',
-      domainInfo: '正式域名：sbti.cyou（审核中）；当前可用：https://49.51.188.49.sslip.io'
+      domainInfo: '正式域名：sbti.cyou'
     };
     const STORAGE_KEY = 'my-sbti-version-state-v1';
 
@@ -2284,6 +2287,29 @@
       return visibleQuestions.length > 0 && visibleQuestions.every((q) => app.answers[q.id] !== undefined);
     }
 
+    function getIncompleteQuestionNumbers() {
+      return getVisibleQuestions().reduce((list, question, index) => {
+        if (app.answers[question.id] === undefined) {
+          list.push(index + 1);
+        }
+        return list;
+      }, []);
+    }
+
+    function showIncompleteQuestionsWarning() {
+      const incompleteNumbers = getIncompleteQuestionNumbers();
+      if (!incompleteNumbers.length) return false;
+
+      testHint.classList.add('is-error');
+      testHint.textContent = `${incompleteNumbers.map((number) => `第${number}题`).join('、')}还没写好，请你填写完成再提交哦。`;
+
+      const firstUnanswered = questionList.querySelectorAll('.question')[incompleteNumbers[0] - 1];
+      if (firstUnanswered) {
+        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return true;
+    }
+
     function persistAppState() {
       try {
         if (!hasPersistableSession()) {
@@ -2393,12 +2419,13 @@
       progressBar.style.width = `${percent}%`;
       progressText.textContent = `${done} / ${total}`;
       const complete = done === total && total > 0;
-      submitBtn.disabled = !complete;
+      submitBtn.disabled = total === 0;
+      testHint.classList.remove('is-error');
       testHint.textContent = complete
         ? '都做完了。现在可以把你的电子魂魄交给结果页审判。'
         : (app.restoredFromCache
             ? '已恢复上次答题进度，继续答就行，不用从头再来。'
-            : '全选完才会放行。世界已经够乱了，起码把题做完整。');
+            : '没做完也可以先点提交，系统会告诉你还缺哪几题。');
       persistAppState();
     }
 
@@ -2782,9 +2809,11 @@
     document.getElementById('libraryStartBtn').addEventListener('click', () => startTest(false));
     document.getElementById('libraryBackBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
-    document.getElementById('submitBtn').addEventListener('click', renderResult);
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      if (showIncompleteQuestionsWarning()) return;
+      renderResult();
+    });
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
-    document.getElementById('toTopBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code));
     saveImageBtn.addEventListener('click', downloadResultImage);
     installBtn.addEventListener('click', installApp);

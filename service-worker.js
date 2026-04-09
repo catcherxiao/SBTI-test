@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sbti-static-v2';
+const CACHE_NAME = 'sbti-static-v3';
 const CORE_ASSETS = [
   './',
   './index.html',
