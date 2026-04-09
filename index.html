@@ -1000,97 +1000,6 @@
       border-radius: 12px;
       display: block;
     }
-    .result-share.is-exporting {
-      width: 390px;
-      max-width: 390px;
-      margin: 0 auto;
-      aspect-ratio: 390 / 844;
-      align-content: space-between;
-      gap: 12px;
-    }
-    .result-share.is-exporting .result-top {
-      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-      gap: 12px;
-    }
-    .result-share.is-exporting .poster-box,
-    .result-share.is-exporting .type-box,
-    .result-share.is-exporting .analysis-box {
-      padding: 14px;
-      border-radius: 16px;
-    }
-    .result-share.is-exporting .poster-box {
-      min-height: 0;
-    }
-    .result-share.is-exporting .poster-image {
-      min-height: 148px;
-      max-height: 260px;
-    }
-    .result-share.is-exporting .poster-caption {
-      margin-top: 8px;
-      font-size: 12px;
-      line-height: 1.55;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .result-share.is-exporting .type-kicker {
-      margin-bottom: 6px;
-      font-size: 11px;
-    }
-    .result-share.is-exporting .type-name {
-      font-size: 30px;
-      line-height: 1.04;
-    }
-    .result-share.is-exporting .match {
-      margin-top: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-    }
-    .result-share.is-exporting .type-subname {
-      margin-top: 8px;
-      font-size: 12px;
-      line-height: 1.55;
-    }
-    .result-share.is-exporting .analysis-box h3 {
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-    .result-share.is-exporting .analysis-box p {
-      font-size: 13px;
-      line-height: 1.65;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .result-share.is-exporting .share-footer {
-      grid-template-columns: minmax(0, 1fr) 92px;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 16px;
-    }
-    .result-share.is-exporting .share-footer-copy {
-      gap: 4px;
-    }
-    .result-share.is-exporting .share-footer-copy strong {
-      font-size: 16px;
-    }
-    .result-share.is-exporting .share-footer-copy p {
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .result-share.is-exporting .share-footer-copy span {
-      font-size: 10px;
-      line-height: 1.4;
-    }
-    .result-share.is-exporting .share-qr-frame {
-      padding: 8px;
-      border-radius: 14px;
-    }
-    .result-share.is-exporting .share-qr-image {
-      max-width: 74px;
-    }
     .library-wrap {
       margin-top: 22px;
       padding: 22px;
@@ -1670,10 +1579,10 @@
           <details class="author-box">
             <summary>作者的话</summary>
             <div class="author-content">
-              <p>本测试首发于b站up主蛆肉儿串儿（UID417038183），初衷是劝诫一位爱喝酒的朋友戒酒。</p>
-              <p>由于作者的人格是SHIT愤世者，所以平等的攻击了各位，在此抱歉！！不过我是一个绝世大美女，你们一定会原谅我，有B站的朋友们也可以关注我。</p>
-              <p>关于这个测试，我没法很好的平衡娱乐和专业性，因此对于一些人格的阐释较为模糊或完全不准（如屌丝可能并非真的屌丝），如有冒犯非常抱歉！！</p>
-              <p>再鉴于时间精力有限，就随便搞了一个先这样玩玩，后续会慢慢完善修改的，总之好玩为主，还请不要用于盈利呀。</p>
+              <p>这个测试的原始创意来自 B 站 up 主 <a href="https://space.bilibili.com/417038183" target="_blank" rel="noreferrer">蛆肉儿串儿</a>（UID417038183）。最早的出发点，也很朴素，就是想用一种又损又好笑的方式，劝一位爱喝酒的朋友少喝点。</p>
+              <p>现在这个网页版本是在原始设定基础上做的前端复刻和体验优化，题库、人格设定和整体气质都尽量保留了原作的味道。也特别感谢 GitHub 上的 <a href="https://github.com/UnluckyNinja/SBTI-test?tab=readme-ov-file" target="_blank" rel="noreferrer">UnluckyNinja/SBTI-test</a>，为这个版本提供了很重要的项目基础。</p>
+              <p>它本质上还是一个偏娱乐向的作品，不是专业心理测评。很多描述更接近调侃、夸张和段子，一些人格名字和解释也可能并不严谨，甚至偶尔会有点冒犯。如果你被它精准创到了，那我先替原作者和这个版本的维护者一起说声抱歉。</p>
+              <p>把它当成一个可以分享、吐槽、找乐子的互动测试就好，不建议拿来给别人下结论、贴标签，或者直接商用。后面如果还有时间，我们也会继续慢慢把体验打磨得更完整一点。</p>
             </div>
           </details>
         </div>
@@ -3182,25 +3091,6 @@
       return `${versionName}-${typeCode}.png`;
     }
 
-    function setResultCaptureExportMode(enabled) {
-      resultCapture.classList.toggle('is-exporting', enabled);
-      if (enabled) {
-        resultCapture.style.width = '390px';
-        resultCapture.style.maxWidth = '390px';
-        resultCapture.style.margin = '0 auto';
-      } else {
-        resultCapture.style.removeProperty('width');
-        resultCapture.style.removeProperty('max-width');
-        resultCapture.style.removeProperty('margin');
-      }
-    }
-
-    function waitForNextPaint() {
-      return new Promise((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(resolve));
-      });
-    }
-
     async function downloadResultImage() {
       if (!app.lastResult) {
         setActionStatus('先生成一次结果，再保存分享图。', true);
@@ -3211,8 +3101,6 @@
       setActionStatus('正在生成分享图，请稍等...');
 
       try {
-        setResultCaptureExportMode(true);
-        await waitForNextPaint();
         await waitForImages(resultCapture);
         const html2canvas = await loadHtml2Canvas();
         const canvas = await html2canvas(resultCapture, {
@@ -3242,7 +3130,6 @@
         console.error(error);
         setActionStatus('分享图生成失败了，刷新页面后再试一次。', true);
       } finally {
-        setResultCaptureExportMode(false);
         saveImageBtn.disabled = false;
       }
     }
