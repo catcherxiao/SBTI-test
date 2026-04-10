@@ -14,9 +14,9 @@
   <meta property="og:title" content="SBTI 性格测试 | 27 种荒诞人格图鉴" />
   <meta property="og:description" content="31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。" />
   <meta property="og:url" content="https://sbti.cyou/" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
   <title>SBTI 性格测试 | 27 种荒诞人格图鉴</title>
   <script>
     (() => {
@@ -1645,7 +1645,7 @@
           <div>
             <div class="eyebrow">Personality Index</div>
             <h2>人格图鉴 / 类型百科</h2>
-            <p class="library-sub">不用重做测试，也能先把所有人格设定翻一遍。移动端点击任意人格，会进入对应的人格详情页。</p>
+            <p class="library-sub">不用重做测试，也能先把所有人格设定翻一遍。点击任意人格，都可以进入对应的人格详情页。</p>
             <p class="library-note">本网站会匿名记录人格结果，预计会在 4.11 版本支持人格比例的统计。</p>
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -1730,7 +1730,7 @@
                 <span>正式入口：sbti.cyou</span>
               </div>
               <div class="share-qr-frame">
-                <img class="share-qr-image" src="./icons/share-qr.png" alt="扫描二维码打开测试" />
+                <img class="share-qr-image" src="/icons/share-qr.png" alt="扫描二维码打开测试" />
               </div>
             </div>
           </div>
@@ -2420,33 +2420,33 @@
   }
 };
     const TYPE_IMAGES = {
-  "IMSB": "./image/IMSB.png",
-  "BOSS": "./image/BOSS.png",
-  "MUM": "./image/MUM.png",
-  "FAKE": "./image/FAKE.png",
-  "Dior-s": "./image/Dior-s.jpg",
-  "DEAD": "./image/DEAD.png",
-  "ZZZZ": "./image/ZZZZ.png",
-  "GOGO": "./image/GOGO.png",
-  "FUCK": "./image/FUCK.png",
-  "CTRL": "./image/CTRL.png",
-  "HHHH": "./image/HHHH.png",
-  "SEXY": "./image/SEXY.png",
-  "OJBK": "./image/OJBK.png",
-  "JOKE-R": "./image/JOKE-R.jpg",
-  "POOR": "./image/POOR.png",
-  "OH-NO": "./image/OH-NO.png",
-  "MONK": "./image/MONK.png",
-  "SHIT": "./image/SHIT.png",
-  "THAN-K": "./image/THAN-K.png",
-  "MALO": "./image/MALO.png",
-  "ATM-er": "./image/ATM-er.png",
-  "THIN-K": "./image/THIN-K.png",
-  "SOLO": "./image/SOLO.png",
-  "LOVE-R": "./image/LOVE-R.png",
-  "WOC!": "./image/WOC.png",
-  "DRUNK": "./image/DRUNK.png",
-  "IMFW": "./image/IMFW.png"
+  "IMSB": "/image/IMSB.png",
+  "BOSS": "/image/BOSS.png",
+  "MUM": "/image/MUM.png",
+  "FAKE": "/image/FAKE.png",
+  "Dior-s": "/image/Dior-s.jpg",
+  "DEAD": "/image/DEAD.png",
+  "ZZZZ": "/image/ZZZZ.png",
+  "GOGO": "/image/GOGO.png",
+  "FUCK": "/image/FUCK.png",
+  "CTRL": "/image/CTRL.png",
+  "HHHH": "/image/HHHH.png",
+  "SEXY": "/image/SEXY.png",
+  "OJBK": "/image/OJBK.png",
+  "JOKE-R": "/image/JOKE-R.jpg",
+  "POOR": "/image/POOR.png",
+  "OH-NO": "/image/OH-NO.png",
+  "MONK": "/image/MONK.png",
+  "SHIT": "/image/SHIT.png",
+  "THAN-K": "/image/THAN-K.png",
+  "MALO": "/image/MALO.png",
+  "ATM-er": "/image/ATM-er.png",
+  "THIN-K": "/image/THIN-K.png",
+  "SOLO": "/image/SOLO.png",
+  "LOVE-R": "/image/LOVE-R.png",
+  "WOC!": "/image/WOC.png",
+  "DRUNK": "/image/DRUNK.png",
+  "IMFW": "/image/IMFW.png"
 };
 
     const NORMAL_TYPES = [
@@ -2856,7 +2856,7 @@
         return '/test/';
       }
       if (screen === 'result') {
-        return type ? `/result/${encodeURIComponent(type)}/` : '/result/';
+        return '/';
       }
       return '/';
     }
@@ -3180,27 +3180,13 @@
         const type = getTypeDescriptor(code);
         const activeClass = code === app.activeLibraryCode ? ' is-active' : '';
         return `
-          <a class="library-card${activeClass}" href="${buildPathFromRoute({ screen: 'library', type: code })}" data-type-code="${code}">
+          <a class="library-card${activeClass}" href="${buildPathFromRoute({ screen: 'library', type: code })}">
             <div class="kicker">${type.kicker}</div>
             <strong>${type.code}（${type.cn}）</strong>
             <p>${type.intro}</p>
           </a>
         `;
       }).join('');
-
-      libraryGrid.querySelectorAll('[data-type-code]').forEach((button) => {
-        button.addEventListener('click', (event) => {
-          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
-            return;
-          }
-          event.preventDefault();
-          setLibraryType(button.dataset.typeCode, {
-            syncUrl: true,
-            focusDetail: isCompactLibraryLayout(),
-            routeToDetail: true
-          });
-        });
-      });
     }
 
     function renderLibraryDetail(code) {
@@ -3350,7 +3336,7 @@
 
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+          navigator.serviceWorker.register('/service-worker.js').catch((error) => {
             console.warn('Service Worker 注册失败', error);
           });
         });
@@ -3950,13 +3936,12 @@
         return true;
       }
       if (route.screen === 'result') {
-        if (openLatestResult({ syncUrl: false })) return true;
+        if (openLatestResult({ syncUrl: false })) {
+          updateUrlState({ screen: null });
+          return true;
+        }
         if (hasType) {
-          openLibrary(route.type, {
-            syncUrl: true,
-            focusDetail: Boolean(route.type) && isCompactLibraryLayout(),
-            routeToDetail: true
-          });
+          window.location.replace(buildPathFromRoute({ screen: 'library', type: route.type }));
           return true;
         }
         return false;
@@ -4027,7 +4012,7 @@
       renderResult();
     });
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false, { confirmDiscard: true }));
-    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code, { focusDetail: isCompactLibraryLayout(), routeToDetail: true }));
+    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code));
     saveImageBtn.addEventListener('click', downloadResultImage);
     installBtn.addEventListener('click', openInstallGuide);
     guideInstallBtn.addEventListener('click', installApp);

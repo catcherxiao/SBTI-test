@@ -68,6 +68,12 @@ function encodeTypePath(code) {
   return encodeURIComponent(code).replaceAll('!', '%21');
 }
 
+function normalizeAssetPath(assetPath = '') {
+  if (!assetPath) return '';
+  if (assetPath.startsWith('/')) return assetPath;
+  return `/${assetPath.replace(/^\.\//, '')}`;
+}
+
 function buildSummary(type, isNormal) {
   return `${type.code}（${type.cn}）是 ${siteName}里的${isNormal ? '标准人格' : '特殊人格'}之一。这个页面整理了它的一句话印象、完整设定、${isNormal ? '维度画像' : '触发逻辑'}与相近类型，方便你在不重做测试的情况下直接了解这个人格的整体气质与典型表现。`;
 }
@@ -154,7 +160,7 @@ function buildRelatedCards(code) {
 
 function buildHead({ title, description, canonicalPath, imagePath, jsonLd }) {
   const canonicalUrl = `${siteUrl}${canonicalPath}`;
-  const imageUrl = imagePath ? `${siteUrl}/${imagePath.replace(/^\.\//, '')}` : `${siteUrl}/icons/icon-512.png`;
+  const imageUrl = imagePath ? `${siteUrl}${normalizeAssetPath(imagePath)}` : `${siteUrl}/icons/icon-512.png`;
   return `  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="${escapeHtml(description)}" />
@@ -230,7 +236,7 @@ function buildDetailPage(code) {
           <a class="btn-primary" href="/test/">开始测试</a>
           <a href="/library/">返回人格图鉴</a>
           <a href="/">回到首页</a>
-          <a href="/result/" data-latest-result-link hidden>我的最新测试结果</a>
+          <a href="/?screen=result" data-latest-result-link hidden>我的最新测试结果</a>
         </div>
         <div class="hero-meta">
           <span class="meta-chip">一句话印象：${escapeHtml(type.intro)}</span>
@@ -238,7 +244,7 @@ function buildDetailPage(code) {
         </div>
       </div>
       <div class="hero-media">
-        <img src="/${imagePath.replace(/^\.\//, '')}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="eager" fetchpriority="high" />
+        <img src="${normalizeAssetPath(imagePath)}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="eager" fetchpriority="high" />
       </div>
     </div>
   </header>`;
@@ -277,7 +283,7 @@ function buildDetailPage(code) {
           <a href="/">首页</a>
           <a href="/library/">人格图鉴总页</a>
           <a href="/test/">直接开始测试</a>
-          <a href="/result/" data-latest-result-link hidden>回到我的测试结果</a>
+          <a href="/?screen=result" data-latest-result-link hidden>回到我的测试结果</a>
         </div>
       </section>
       <section class="page-card section-card aside-card">
@@ -349,7 +355,7 @@ function buildLibraryIndex() {
         <div class="hero-actions">
           <a class="btn-primary" href="/test/">开始测试</a>
           <a href="/">回到首页</a>
-          <a href="/result/" data-latest-result-link hidden>我的最新测试结果</a>
+          <a href="/?screen=result" data-latest-result-link hidden>我的最新测试结果</a>
         </div>
         <div class="hero-meta">
           <span class="meta-chip">已收录人格：${LIBRARY_TYPE_CODES.length} 种</span>
@@ -368,7 +374,7 @@ function buildLibraryIndex() {
     return `
       <a class="type-card" href="/library/${encodeTypePath(code)}/">
         <div class="type-card-thumb">
-          <img src="/${TYPE_IMAGES[code].replace(/^\.\//, '')}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="lazy" />
+          <img src="${normalizeAssetPath(TYPE_IMAGES[code])}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="lazy" />
         </div>
         <div class="kicker">${isNormal ? '标准人格' : '特殊人格'}</div>
         <strong>${escapeHtml(type.code)}（${escapeHtml(type.cn)}）</strong>
@@ -400,7 +406,7 @@ function buildLibraryIndex() {
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-${buildHead({ title, description, canonicalPath, imagePath: './image/CTRL.png', jsonLd })}
+${buildHead({ title, description, canonicalPath, imagePath: '/image/CTRL.png', jsonLd })}
 </head>
 <body>
 ${buildLayout({ breadcrumb, hero, body, note })}

@@ -16,7 +16,7 @@ function updateLatestResultLinks() {
   document.querySelectorAll('[data-latest-result-link]').forEach((link) => {
     link.hidden = !hasCompletedResult;
     if (hasCompletedResult) {
-      link.setAttribute('href', '/result/');
+      link.setAttribute('href', '/?screen=result');
     }
   });
 }
