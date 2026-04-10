@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /stats.html
+Disallow: /test/
+Disallow: /result/
+Disallow: /*?screen=test*
+Disallow: /*?screen=result*
+
+Sitemap: https://sbti.cyou/sitemap.xml

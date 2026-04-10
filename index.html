@@ -3,14 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。" />
+  <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#4d6a53" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="我的 SBTI 版本" />
+  <link rel="canonical" href="https://sbti.cyou/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SBTI 性格测试 | 27 种荒诞人格图鉴" />
+  <meta property="og:description" content="31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。" />
+  <meta property="og:url" content="https://sbti.cyou/" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
-  <title>我的 SBTI 版本</title>
+  <title>SBTI 性格测试 | 27 种荒诞人格图鉴</title>
+  <script>
+    (() => {
+      const siteUrl = 'https://sbti.cyou';
+      const siteName = '我的 SBTI 版本';
+      const defaultTitle = 'SBTI 性格测试 | 27 种荒诞人格图鉴';
+      const defaultDescription = '31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。';
+      const trimSlash = (value) => value.replace(/\/+$/, '') || '/';
+      const path = trimSlash(window.location.pathname || '/');
+      const segments = path === '/' ? [] : path.split('/').filter(Boolean);
+
+      let title = defaultTitle;
+      let description = defaultDescription;
+      let canonicalPath = '/';
+      let robots = 'index,follow';
+
+      if (segments[0] === 'library' && segments[1]) {
+        const typeCode = decodeURIComponent(segments[1]);
+        title = `${typeCode} 人格详情 | ${siteName}`;
+        description = `查看 ${typeCode} 的 SBTI 人格详情、设定和图鉴页面。`;
+        canonicalPath = `/library/${encodeURIComponent(typeCode)}/`;
+      } else if (segments[0] === 'library') {
+        title = `人格图鉴 | ${siteName}`;
+        description = '查看全部 SBTI 人格图鉴与类型百科，点击可进入每个人格的独立详情页。';
+        canonicalPath = '/library/';
+      } else if (segments[0] === 'test') {
+        title = `开始测试 | ${siteName}`;
+        description = '进入 SBTI 测试页，完成 31 道题后生成你的荒诞人格结果。';
+        canonicalPath = '/test/';
+        robots = 'noindex,nofollow';
+      } else if (segments[0] === 'result') {
+        title = `测试结果 | ${siteName}`;
+        description = '查看你的 SBTI 测试结果、相近人格和十五维度解析。';
+        canonicalPath = segments[1] ? `/result/${encodeURIComponent(decodeURIComponent(segments[1]))}/` : '/result/';
+        robots = 'noindex,nofollow';
+      }
+
+      document.title = title;
+
+      const setMeta = (selector, attribute, value) => {
+        const element = document.querySelector(selector);
+        if (element) element.setAttribute(attribute, value);
+      };
+
+      setMeta('meta[name="description"]', 'content', description);
+      setMeta('meta[name="robots"]', 'content', robots);
+      setMeta('link[rel="canonical"]', 'href', `${siteUrl}${canonicalPath}`);
+      setMeta('meta[property="og:title"]', 'content', title);
+      setMeta('meta[property="og:description"]', 'content', description);
+      setMeta('meta[property="og:url"]', 'content', `${siteUrl}${canonicalPath}`);
+    })();
+  </script>
   <style>
     :root {
       --bg: #f6faf6;
@@ -693,6 +751,84 @@
       font-size: 12px;
       line-height: 1.7;
     }
+    .site-footer {
+      margin-top: 18px;
+    }
+    .site-footer-inner {
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+    }
+    .site-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+    }
+    .compliance-link,
+    .compliance-text {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    button.compliance-link {
+      appearance: none;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      font: inherit;
+    }
+    a.compliance-link {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+    .compliance-link:hover,
+    .compliance-link:focus-visible {
+      color: var(--accent-strong);
+    }
+    button.compliance-link:focus-visible,
+    a.compliance-link:focus-visible {
+      outline: 2px solid rgba(108, 141, 113, 0.28);
+      outline-offset: 4px;
+      border-radius: 6px;
+    }
+    .policy-meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .policy-body {
+      display: grid;
+      gap: 16px;
+      max-height: min(60vh, 540px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .policy-section {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .policy-section:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+    .policy-section h3 {
+      font-size: 15px;
+      margin-bottom: 0;
+    }
+    .policy-section p {
+      margin-top: 8px;
+      color: #304034;
+      font-size: 14px;
+      line-height: 1.85;
+    }
 
     
     .result-layout {
@@ -1079,6 +1215,9 @@
       padding: 16px;
       text-align: left;
       width: 100%;
+      display: block;
+      color: inherit;
+      text-decoration: none;
     }
     .library-card.is-active {
       border-color: #97b59c;
@@ -1180,6 +1319,9 @@
       color: #304034;
       font-size: 14px;
       line-height: 1.9;
+    }
+    .compliance-sheet {
+      max-width: 760px;
     }
 
     .result-actions {
@@ -1375,6 +1517,15 @@
       }
       .action-buttons { grid-template-columns: 1fr; }
       .action-buttons button { min-height: 54px; }
+      .site-footer-inner {
+        padding: 14px 16px;
+      }
+      .site-footer-links {
+        gap: 6px 12px;
+      }
+      .policy-body {
+        max-height: min(58vh, 500px);
+      }
     }
   </style>
 </head>
@@ -1636,6 +1787,36 @@
       </div>
     </section>
 
+    <footer class="site-footer" aria-label="网站合规信息">
+      <div class="site-footer-inner card">
+        <div class="site-footer-links">
+          <button type="button" class="compliance-link" data-compliance-doc="privacy">隐私政策</button>
+          <button type="button" class="compliance-link" data-compliance-doc="terms">用户协议</button>
+          <button type="button" class="compliance-link" data-compliance-doc="subject">主体信息</button>
+          <span id="footerIcpText" class="compliance-text">备案号：待补充</span>
+          <a id="footerIcpLink" class="compliance-link" href="#" target="_blank" rel="noreferrer nofollow" hidden></a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <div id="complianceModal" class="guide-modal" hidden>
+    <div class="guide-backdrop" data-close-compliance="true"></div>
+    <div class="guide-sheet card compliance-sheet" role="dialog" aria-modal="true" aria-labelledby="complianceTitle">
+      <div class="guide-sheet-top">
+        <div>
+          <div class="eyebrow">Compliance Info</div>
+          <h2 id="complianceTitle">隐私政策</h2>
+          <p id="complianceMeta" class="policy-meta"></p>
+        </div>
+        <button id="complianceCloseBtn" class="guide-close" type="button">关闭</button>
+      </div>
+      <div id="complianceBody" class="policy-body"></div>
+      <div class="guide-actions">
+        <button id="complianceDoneBtn" class="btn-secondary" type="button">我知道了</button>
+      </div>
+    </div>
   </div>
 
   <div id="shareImageModal" class="guide-modal" hidden>
@@ -1661,10 +1842,86 @@
 
   <script>
     const SITE_CONFIG = {
+      siteUrl: 'https://sbti.cyou',
+      siteName: '我的 SBTI 版本',
       documentTitle: '我的 SBTI 版本',
       introTitle: '这是我的 SBTI 版本。',
+      defaultSeoTitle: 'SBTI 性格测试 | 27 种荒诞人格图鉴',
+      defaultSeoDescription: '31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。',
       deployInfo: '',
       domainInfo: '如有问题或合作请联系 sbti_ccc@163.com',
+      compliance: {
+        icpLabel: '备案号：待补充',
+        icpHref: '',
+        subjectInfo: [
+          '主办者：SBTI 测试站维护者',
+          '主体类型：个人非经营性网站',
+          '联系邮箱：sbti_ccc@163.com',
+          '服务内容：娱乐向人格测试、人格图鉴浏览与分享图导出'
+        ],
+        privacyUpdatedAt: '2026-04-10',
+        privacySections: [
+          {
+            title: '我们会收集哪些信息',
+            paragraphs: [
+              '为了让测试进度和结果能在当前设备里恢复显示，网站会在你的浏览器本地保存答题进度、匿名标识和最近一次测试结果。',
+              '当你主动完成测试并生成结果时，页面会向 `/api/result` 提交匿名标识、结果类型、是否命中隐藏人格、提交时间和版本号，用于做去重后的结果统计。'
+            ]
+          },
+          {
+            title: '我们如何使用这些信息',
+            paragraphs: [
+              '本地存储信息只用于恢复你的测试体验，例如刷新页面后继续查看结果。',
+              '服务端收到的匿名结果仅用于统计不同人格的分布情况，不会用于识别你的真实身份，也不会用于画像营销。'
+            ]
+          },
+          {
+            title: '信息共享与保存',
+            paragraphs: [
+              '除法律法规另有要求外，本站不会主动向第三方出售或共享你的个人信息。',
+              '如果你清除浏览器站点数据，本地保存的答题进度和结果会一并被删除。'
+            ]
+          },
+          {
+            title: '联系与更新',
+            paragraphs: [
+              '如果你对本政策有疑问、建议，或希望反馈问题，可以通过 `sbti_ccc@163.com` 联系站点维护者。',
+              '当功能或数据处理方式发生明显变化时，本页面会同步更新说明。'
+            ]
+          }
+        ],
+        termsUpdatedAt: '2026-04-10',
+        termsSections: [
+          {
+            title: '服务性质',
+            paragraphs: [
+              '本网站提供的是娱乐向人格测试和图鉴内容，不构成医学、心理学、法律或其他专业建议。',
+              '你可以把它当成互动测试、吐槽和分享工具，但不建议把结果当成正式判断依据。'
+            ]
+          },
+          {
+            title: '使用规则',
+            paragraphs: [
+              '你在使用本站时，不得利用站点从事违法违规、攻击破坏、批量爬取或干扰他人正常访问的行为。',
+              '未经授权，请不要将本站内容包装成你的官方作品、产品功能或商业服务对外售卖。'
+            ]
+          },
+          {
+            title: '内容说明',
+            paragraphs: [
+              '测试题目、人格命名和文案带有明显调侃和夸张表达，部分内容可能带有冒犯感，使用前请自行判断是否适合传播或转发。',
+              '若你认为站内内容涉及侵权、误用或不当展示，可以通过页面公示的联系方式反馈处理。'
+            ]
+          },
+          {
+            title: '责任边界',
+            paragraphs: [
+              '在法律允许的范围内，站点会尽力保证服务可用，但不对因网络波动、设备兼容性或第三方平台限制导致的访问异常承担额外责任。',
+              '你继续访问或使用本站，即表示你已阅读并同意本协议的基本内容。'
+            ]
+          }
+        ]
+      },
       analyticsEndpoint: '/api/result',
       analyticsVersion: 'sbti-web-v1'
     };
@@ -2387,7 +2644,8 @@
       restoredFromCache: false,
       lastResult: null,
       activeLibraryCode: LIBRARY_TYPE_CODES[0],
-      libraryMobileDetail: false
+      libraryMobileDetail: false,
+      libraryRouteType: null
     };
 
     const screens = {
@@ -2432,9 +2690,17 @@
     const sharePreviewHint = document.getElementById('sharePreviewHint');
     const shareImageCloseBtn = document.getElementById('shareImageCloseBtn');
     const shareImageDoneBtn = document.getElementById('shareImageDoneBtn');
+    const complianceModal = document.getElementById('complianceModal');
+    const complianceTitle = document.getElementById('complianceTitle');
+    const complianceMeta = document.getElementById('complianceMeta');
+    const complianceBody = document.getElementById('complianceBody');
+    const complianceCloseBtn = document.getElementById('complianceCloseBtn');
+    const complianceDoneBtn = document.getElementById('complianceDoneBtn');
+    const footerIcpText = document.getElementById('footerIcpText');
+    const footerIcpLink = document.getElementById('footerIcpLink');
+    const complianceTriggers = document.querySelectorAll('[data-compliance-doc]');
 
     function applySiteConfig() {
-      document.title = SITE_CONFIG.documentTitle;
       document.getElementById('introTitle').textContent = SITE_CONFIG.introTitle;
       const deployInfoEl = document.getElementById('deployInfo');
       if (SITE_CONFIG.deployInfo) {
@@ -2452,8 +2718,201 @@
         domainInfoEl.textContent = '';
         domainInfoEl.hidden = true;
       }
+      const icpLabel = SITE_CONFIG.compliance?.icpLabel || '';
+      const icpHref = SITE_CONFIG.compliance?.icpHref || '';
+      if (icpHref && icpLabel) {
+        footerIcpLink.textContent = icpLabel;
+        footerIcpLink.href = icpHref;
+        footerIcpLink.hidden = false;
+        footerIcpText.hidden = true;
+      } else {
+        footerIcpText.textContent = icpLabel || '备案号：待补充';
+        footerIcpText.hidden = false;
+        footerIcpLink.hidden = true;
+      }
       const mobileTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-      if (mobileTitle) mobileTitle.setAttribute('content', SITE_CONFIG.documentTitle);
+      if (mobileTitle) mobileTitle.setAttribute('content', SITE_CONFIG.siteName);
+    }
+
+    function getComplianceDocument(docKey) {
+      const compliance = SITE_CONFIG.compliance || {};
+      if (docKey === 'privacy') {
+        return {
+          title: '隐私政策',
+          meta: `更新日期：${compliance.privacyUpdatedAt || '待补充'}`,
+          sections: compliance.privacySections || []
+        };
+      }
+      if (docKey === 'terms') {
+        return {
+          title: '用户协议',
+          meta: `更新日期：${compliance.termsUpdatedAt || '待补充'}`,
+          sections: compliance.termsSections || []
+        };
+      }
+      if (docKey === 'subject') {
+        return {
+          title: '主体信息',
+          meta: '以下内容用于站点对外公示，请以实际备案信息为准。',
+          sections: [
+            {
+              title: '站点主体公示',
+              paragraphs: [
+                ...(compliance.subjectInfo || []),
+                compliance.icpLabel || '备案号：待补充'
+              ]
+            }
+          ]
+        };
+      }
+      return null;
+    }
+
+    function renderComplianceDocument(doc) {
+      complianceTitle.textContent = doc.title;
+      complianceMeta.textContent = doc.meta || '';
+      complianceMeta.hidden = !doc.meta;
+      complianceBody.replaceChildren();
+
+      doc.sections.forEach((section) => {
+        const article = document.createElement('article');
+        article.className = 'policy-section';
+
+        if (section.title) {
+          const heading = document.createElement('h3');
+          heading.textContent = section.title;
+          article.appendChild(heading);
+        }
+
+        (section.paragraphs || []).forEach((text) => {
+          const paragraph = document.createElement('p');
+          paragraph.textContent = text;
+          article.appendChild(paragraph);
+        });
+
+        complianceBody.appendChild(article);
+      });
+    }
+
+    function openComplianceModal(docKey) {
+      const doc = getComplianceDocument(docKey);
+      if (!doc) return;
+      renderComplianceDocument(doc);
+      complianceModal.hidden = false;
+      document.body.classList.add('modal-open');
+    }
+
+    function closeComplianceModal() {
+      complianceModal.hidden = true;
+      document.body.classList.remove('modal-open');
+    }
+
+    function setMetaContent(selector, content) {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.setAttribute('content', content);
+      }
+    }
+
+    function setLinkHref(selector, href) {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.setAttribute('href', href);
+      }
+    }
+
+    function summarizeSeoText(text, maxLength = 96) {
+      const normalized = String(text || '').replace(/\s+/g, ' ').trim();
+      if (!normalized) return SITE_CONFIG.defaultSeoDescription;
+      if (normalized.length <= maxLength) return normalized;
+      return `${normalized.slice(0, maxLength).trim()}...`;
+    }
+
+    function normalizePath(pathname = '/') {
+      const compact = `/${String(pathname || '/').replace(/^\/+|\/+$/g, '')}`.replace(/\/{2,}/g, '/');
+      return compact === '/' ? '/' : `${compact}/`;
+    }
+
+    function buildPathFromRoute(params = {}) {
+      const screen = params.screen || null;
+      const type = params.type && TYPE_LIBRARY[params.type] ? params.type : null;
+
+      if (screen === 'library') {
+        return type ? `/library/${encodeURIComponent(type)}/` : '/library/';
+      }
+      if (screen === 'test') {
+        return '/test/';
+      }
+      if (screen === 'result') {
+        return type ? `/result/${encodeURIComponent(type)}/` : '/result/';
+      }
+      return '/';
+    }
+
+    function buildCanonicalUrl(pathname) {
+      return new URL(normalizePath(pathname), SITE_CONFIG.siteUrl).toString();
+    }
+
+    function getSeoPayload(screen, typeCode = null) {
+      if (screen === 'library') {
+        if (typeCode && TYPE_LIBRARY[typeCode]) {
+          const type = TYPE_LIBRARY[typeCode];
+          return {
+            title: `${type.code}（${type.cn}）人格详情 | ${SITE_CONFIG.siteName}`,
+            description: summarizeSeoText(`${type.intro} ${type.desc}`, 110),
+            canonicalPath: buildPathFromRoute({ screen: 'library', type: type.code }),
+            robots: 'index,follow'
+          };
+        }
+
+        return {
+          title: `人格图鉴 | ${SITE_CONFIG.siteName}`,
+          description: '查看全部 SBTI 人格图鉴与类型百科，点击可进入每个人格的独立详情页。',
+          canonicalPath: '/library/',
+          robots: 'index,follow'
+        };
+      }
+
+      if (screen === 'test') {
+        return {
+          title: `开始测试 | ${SITE_CONFIG.siteName}`,
+          description: '进入 SBTI 测试页，完成 31 道题后生成你的荒诞人格结果。',
+          canonicalPath: '/test/',
+          robots: 'noindex,nofollow'
+        };
+      }
+
+      if (screen === 'result') {
+        const type = typeCode && TYPE_LIBRARY[typeCode] ? TYPE_LIBRARY[typeCode] : null;
+        return {
+          title: type ? `测试结果：${type.code}（${type.cn}） | ${SITE_CONFIG.siteName}` : `测试结果 | ${SITE_CONFIG.siteName}`,
+          description: type
+            ? summarizeSeoText(`查看 ${type.code}（${type.cn}）的测试结果、相近人格和十五维度解析。`, 100)
+            : '查看你的 SBTI 测试结果、相近人格和十五维度解析。',
+          canonicalPath: buildPathFromRoute({ screen: 'result', type: type?.code || null }),
+          robots: 'noindex,nofollow'
+        };
+      }
+
+      return {
+        title: SITE_CONFIG.defaultSeoTitle,
+        description: SITE_CONFIG.defaultSeoDescription,
+        canonicalPath: '/',
+        robots: 'index,follow'
+      };
+    }
+
+    function updateSeoMeta(screen, typeCode = null) {
+      const seo = getSeoPayload(screen, typeCode);
+      const canonicalUrl = buildCanonicalUrl(seo.canonicalPath);
+
+      document.title = seo.title;
+      setMetaContent('meta[name="description"]', seo.description);
+      setMetaContent('meta[name="robots"]', seo.robots);
+      setLinkHref('link[rel="canonical"]', canonicalUrl);
+      setMetaContent('meta[property="og:title"]', seo.title);
+      setMetaContent('meta[property="og:description"]', seo.description);
+      setMetaContent('meta[property="og:url"]', canonicalUrl);
     }
 
     function setActionStatus(message = '', isError = false) {
@@ -2526,19 +2985,53 @@
 
     function updateUrlState(params = {}) {
       const url = new URL(window.location.href);
-      Object.entries(params).forEach(([key, value]) => {
-        if (value === null || value === undefined || value === '') {
-          url.searchParams.delete(key);
-        } else {
-          url.searchParams.set(key, value);
-        }
-      });
+      url.pathname = buildPathFromRoute(params);
+      url.searchParams.delete('screen');
+      url.searchParams.delete('type');
       const query = url.searchParams.toString();
       window.history.replaceState({}, '', `${url.pathname}${query ? `?${query}` : ''}${url.hash}`);
     }
 
-    function getCurrentUrlParams() {
-      return new URLSearchParams(window.location.search);
+    function parsePathRoute(pathname = window.location.pathname) {
+      const normalizedPath = normalizePath(pathname);
+      const segments = normalizedPath === '/' ? [] : normalizedPath.split('/').filter(Boolean);
+
+      if (!segments.length) {
+        return { screen: 'intro', type: null };
+      }
+
+      if (segments[0] === 'library') {
+        const type = segments[1] ? decodeURIComponent(segments[1]) : null;
+        return { screen: 'library', type: TYPE_LIBRARY[type] ? type : null };
+      }
+
+      if (segments[0] === 'test') {
+        return { screen: 'test', type: null };
+      }
+
+      if (segments[0] === 'result') {
+        const type = segments[1] ? decodeURIComponent(segments[1]) : null;
+        return { screen: 'result', type: TYPE_LIBRARY[type] ? type : null };
+      }
+
+      return null;
+    }
+
+    function parseLegacyQueryRoute() {
+      const params = new URLSearchParams(window.location.search);
+      const screen = params.get('screen');
+      const type = params.get('type');
+
+      if (!screen) return null;
+
+      return {
+        screen,
+        type: type && TYPE_LIBRARY[type] ? type : null
+      };
+    }
+
+    function getCurrentRoute() {
+      return parsePathRoute() || parseLegacyQueryRoute();
     }
 
     function readSavedSession() {
@@ -2618,6 +3111,7 @@
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       updateLibraryChrome();
+      updateSeoMeta(name, name === 'library' ? app.libraryRouteType : type);
     }
 
     function shuffle(array) {
@@ -2669,19 +3163,24 @@
         const type = getTypeDescriptor(code);
         const activeClass = code === app.activeLibraryCode ? ' is-active' : '';
         return `
-          <button class="library-card${activeClass}" type="button" data-type-code="${code}">
+          <a class="library-card${activeClass}" href="${buildPathFromRoute({ screen: 'library', type: code })}" data-type-code="${code}">
             <div class="kicker">${type.kicker}</div>
             <strong>${type.code}（${type.cn}）</strong>
             <p>${type.intro}</p>
-          </button>
+          </a>
         `;
       }).join('');
 
       libraryGrid.querySelectorAll('[data-type-code]').forEach((button) => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (event) => {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+            return;
+          }
+          event.preventDefault();
           setLibraryType(button.dataset.typeCode, {
             syncUrl: true,
-            focusDetail: isCompactLibraryLayout()
+            focusDetail: isCompactLibraryLayout(),
+            routeToDetail: true
           });
         });
       });
@@ -2710,29 +3209,33 @@
     }
 
     function setLibraryType(code, options = {}) {
-      const { syncUrl = false, focusDetail = false } = options;
+      const { syncUrl = false, focusDetail = false, routeToDetail = false } = options;
       if (!TYPE_LIBRARY[code]) return;
       app.activeLibraryCode = code;
       app.libraryMobileDetail = Boolean(focusDetail) && isCompactLibraryLayout();
+      app.libraryRouteType = routeToDetail ? code : null;
       renderLibraryGrid();
       renderLibraryDetail(code);
       if (syncUrl && screens.library.classList.contains('active')) {
-        updateUrlState({ screen: 'library', type: code });
+        updateUrlState({ screen: 'library', type: app.libraryRouteType });
       }
       updateLibraryChrome();
+      if (screens.library.classList.contains('active')) {
+        updateSeoMeta('library', app.libraryRouteType);
+      }
       if (app.libraryMobileDetail) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
     function openLibrary(code = app.lastResult?.finalType?.code || app.activeLibraryCode || LIBRARY_TYPE_CODES[0], options = {}) {
-      const { syncUrl = true, focusDetail = false } = options;
-      setLibraryType(code, { syncUrl: false, focusDetail });
+      const { syncUrl = true, focusDetail = false, routeToDetail = false } = options;
+      setLibraryType(code, { syncUrl: false, focusDetail, routeToDetail });
       showScreen('library', { syncUrl: false });
       if (syncUrl) {
         updateUrlState({
           screen: 'library',
-          type: (app.libraryMobileDetail || !isCompactLibraryLayout()) ? code : null
+          type: app.libraryRouteType
         });
       }
     }
@@ -3367,6 +3870,7 @@
       app.restoredFromCache = false;
       app.lastResult = null;
       app.libraryMobileDetail = false;
+      app.libraryRouteType = null;
       app.answers = {};
       const shuffledRegular = shuffle(questions);
       const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
@@ -3390,26 +3894,36 @@
     }
 
     function applyInitialRoute() {
-      const params = getCurrentUrlParams();
-      const screen = params.get('screen');
-      const type = params.get('type');
-      const hasType = type && TYPE_LIBRARY[type];
+      const route = getCurrentRoute();
+      if (!route || route.screen === 'intro') {
+        return false;
+      }
+      const hasType = route.type && TYPE_LIBRARY[route.type];
 
-      if (screen === 'library') {
-        openLibrary(hasType ? type : app.activeLibraryCode, {
+      if (route.screen === 'library') {
+        openLibrary(hasType ? route.type : app.activeLibraryCode, {
           syncUrl: false,
-          focusDetail: Boolean(hasType) && isCompactLibraryLayout()
+          focusDetail: Boolean(hasType) && isCompactLibraryLayout(),
+          routeToDetail: Boolean(hasType)
         });
         return true;
       }
-      if (screen === 'test') {
+      if (route.screen === 'test') {
         const restored = restoreAppState({ deferCompleted: true, syncUrl: false, allowIncompleteTest: true });
         if (restored === 'incomplete') return true;
         startTest(false, { syncUrl: false });
         return true;
       }
-      if (screen === 'result') {
+      if (route.screen === 'result') {
         if (openLatestResult({ syncUrl: false })) return true;
+        if (hasType) {
+          openLibrary(route.type, {
+            syncUrl: true,
+            focusDetail: Boolean(route.type) && isCompactLibraryLayout(),
+            routeToDetail: true
+          });
+          return true;
+        }
         return false;
       }
       return false;
@@ -3417,8 +3931,11 @@
 
     function showLibraryGrid() {
       app.libraryMobileDetail = false;
+      app.libraryRouteType = null;
+      renderLibraryGrid();
       updateLibraryChrome();
       updateUrlState({ screen: 'library', type: null });
+      updateSeoMeta('library', null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -3432,6 +3949,10 @@
     function closeTopMostModal() {
       if (!shareImageModal.hidden) {
         closeShareImageModal();
+        return true;
+      }
+      if (!complianceModal.hidden) {
+        closeComplianceModal();
         return true;
       }
       if (!installGuide.hidden) {
@@ -3471,7 +3992,7 @@
       renderResult();
     });
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
-    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code, { focusDetail: isCompactLibraryLayout() }));
+    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code, { focusDetail: isCompactLibraryLayout(), routeToDetail: true }));
     saveImageBtn.addEventListener('click', downloadResultImage);
     installBtn.addEventListener('click', openInstallGuide);
     guideInstallBtn.addEventListener('click', installApp);
@@ -3479,9 +4000,19 @@
     guideDoneBtn.addEventListener('click', closeInstallGuide);
     shareImageCloseBtn.addEventListener('click', closeShareImageModal);
     shareImageDoneBtn.addEventListener('click', closeShareImageModal);
+    complianceCloseBtn.addEventListener('click', closeComplianceModal);
+    complianceDoneBtn.addEventListener('click', closeComplianceModal);
+    complianceTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => openComplianceModal(trigger.dataset.complianceDoc));
+    });
     installGuide.addEventListener('click', (event) => {
       if (event.target.dataset.closeGuide === 'true') {
         closeInstallGuide();
+      }
+    });
+    complianceModal.addEventListener('click', (event) => {
+      if (event.target.dataset.closeCompliance === 'true') {
+        closeComplianceModal();
       }
     });
     shareImageModal.addEventListener('click', (event) => {

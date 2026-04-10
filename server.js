@@ -24,6 +24,8 @@ const MIME_TYPES = {
   '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.webp': 'image/webp'
 };
+const PRIVATE_PATHS = new Set(['/server.js']);
+const PRIVATE_PREFIXES = ['/data/'];
 
 function ensureDataDir() {
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
@@ -317,9 +319,28 @@ function getStaticFilePath(urlPathname) {
   return filePath;
 }
 
+function isPrivateStaticPath(pathname) {
+  return PRIVATE_PATHS.has(pathname) || PRIVATE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+function shouldServeSpaFallback(pathname) {
+  if (!pathname || pathname === '/') return true;
+  if (path.extname(pathname)) return false;
+  return !pathname.startsWith('/api/');
+}
+
 function serveStaticFile(req, res, pathname) {
+  if (isPrivateStaticPath(pathname)) {
+    sendText(res, 404, 'Not Found');
+    return;
+  }
+
   const filePath = getStaticFilePath(pathname);
   if (!filePath || !fs.existsSync(filePath)) {
+    if (shouldServeSpaFallback(pathname)) {
+      serveStaticFile(req, res, '/index.html');
+      return;
+    }
     sendText(res, 404, 'Not Found');
     return;
   }
