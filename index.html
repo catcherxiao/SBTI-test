@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#4d6a53" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="我的 SBTI 版本" />
+  <meta name="apple-mobile-web-app-title" content="SBTI 性格测试" />
   <link rel="canonical" href="https://sbti.cyou/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="SBTI 性格测试 | 27 种荒诞人格图鉴" />
@@ -21,7 +21,7 @@
   <script>
     (() => {
       const siteUrl = 'https://sbti.cyou';
-      const siteName = '我的 SBTI 版本';
+      const siteName = 'SBTI 性格测试';
       const defaultTitle = 'SBTI 性格测试 | 27 种荒诞人格图鉴';
       const defaultDescription = '31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。';
       const trimSlash = (value) => value.replace(/\/+$/, '') || '/';
@@ -1546,7 +1546,7 @@
         <div class="hero-stage">
           <div class="hero-copy">
             <div class="eyebrow">SBTI Personality Lab</div>
-            <h1 id="introTitle">这是我的 SBTI 版本。</h1>
+            <h1 id="introTitle">测出你的 SBTI 荒诞人格。</h1>
             <p class="sub">31 道题，27 种荒诞人格。测完就能保存分享图，也能像小应用一样留在你的主屏幕里。</p>
             <div class="hero-actions hero-actions-single">
               <button id="startBtn" class="btn-primary">开始测试</button>
@@ -1586,11 +1586,9 @@
             原作者：
             <a href="https://space.bilibili.com/417038183">B站@蛆肉儿串儿</a>
           </span>
-          <span id="deployInfo">
-            托管：待替换为你的部署平台
-          </span>
+          <span id="deployInfo" hidden></span>
           <span id="domainInfo">
-            域名：待替换为你的域名
+            如有问题或合作请联系 sbti_ccc@163.com
           </span>
         </div>
       </div>
@@ -1663,10 +1661,10 @@
                 <img id="libraryImage" class="library-detail-image" alt="人格图鉴插图" />
               </div>
               <div class="library-detail-copy">
-                <div class="type-kicker" id="libraryTypeKicker">标准人格</div>
-                <div class="type-name" id="libraryTypeName">CTRL（拿捏者）</div>
-                <div class="match" id="libraryTypeMeta">模板人格</div>
-                <p id="libraryTypeIntro">人格图鉴会在这里显示该类型的一句话印象。</p>
+                <div class="type-kicker" id="libraryTypeKicker">人格档案</div>
+                <div class="type-name" id="libraryTypeName">点击任意人格查看详情</div>
+                <div class="match" id="libraryTypeMeta">27 种人格设定已收录</div>
+                <p id="libraryTypeIntro">点击左侧人格卡片后，会同步展示对应的一句话印象、完整设定和插图。</p>
                 <div class="library-detail-actions">
                   <button id="libraryGridBackBtn" class="btn-secondary" type="button" hidden>全部人格</button>
                   <button id="libraryResultBtn" class="btn-secondary" type="button" hidden>回到我的测试结果</button>
@@ -1716,7 +1714,7 @@
                 <div class="type-kicker" id="resultModeKicker">你的主类型</div>
                 <div class="type-name" id="resultTypeName">CTRL（拿捏者）</div>
                 <div class="match" id="matchBadge">匹配度 92%</div>
-                <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
+                <div class="type-subname" id="resultTypeSub">完成测试后，会补上一句更贴近你的结果说明。</div>
               </div>
             </div>
 
@@ -1805,7 +1803,7 @@
           <button type="button" class="compliance-link" data-compliance-doc="privacy">隐私政策</button>
           <button type="button" class="compliance-link" data-compliance-doc="terms">用户协议</button>
           <button type="button" class="compliance-link" data-compliance-doc="subject">主体信息</button>
-          <span id="footerIcpText" class="compliance-text">备案号：待补充</span>
+          <span id="footerIcpText" class="compliance-text">备案信息更新中</span>
           <a id="footerIcpLink" class="compliance-link" href="#" target="_blank" rel="noreferrer nofollow" hidden></a>
         </div>
       </div>
@@ -1838,7 +1836,7 @@
         <div>
           <div class="eyebrow">Share Image</div>
           <h2 id="sharePreviewTitle">长按图片即可保存或转发</h2>
-          <p id="sharePreviewHint" class="guide-lead">图片生成后会显示在这里，微信里可以直接长按保存到相册。</p>
+          <p id="sharePreviewHint" class="guide-lead">生成后可直接长按保存，适合发到微信聊天、朋友圈或收藏到相册。</p>
         </div>
         <button id="shareImageCloseBtn" class="guide-close" type="button">关闭</button>
       </div>
@@ -1855,19 +1853,19 @@
   <script>
     const SITE_CONFIG = {
       siteUrl: 'https://sbti.cyou',
-      siteName: '我的 SBTI 版本',
-      documentTitle: '我的 SBTI 版本',
-      introTitle: '这是我的 SBTI 版本。',
+      siteName: 'SBTI 性格测试',
+      documentTitle: 'SBTI 性格测试',
+      introTitle: '测出你的 SBTI 荒诞人格。',
       defaultSeoTitle: 'SBTI 性格测试 | 27 种荒诞人格图鉴',
       defaultSeoDescription: '31 道题测出你的 SBTI 荒诞人格，支持保存分享图、查看人格图鉴和移动端访问。',
       deployInfo: '',
       domainInfo: '如有问题或合作请联系 sbti_ccc@163.com',
       compliance: {
-        icpLabel: '备案号：待补充',
+        icpLabel: '备案信息更新中',
         icpHref: '',
         subjectInfo: [
-          '主办者：SBTI 测试站维护者',
-          '主体类型：个人非经营性网站',
+          '站点名称：SBTI 性格测试',
+          '站点类型：个人非经营性网站',
           '联系邮箱：sbti_ccc@163.com',
           '服务内容：娱乐向人格测试、人格图鉴浏览与分享图导出'
         ],
@@ -2739,7 +2737,7 @@
         footerIcpLink.hidden = false;
         footerIcpText.hidden = true;
       } else {
-        footerIcpText.textContent = icpLabel || '备案号：待补充';
+        footerIcpText.textContent = icpLabel || '备案信息更新中';
         footerIcpText.hidden = false;
         footerIcpLink.hidden = true;
       }
@@ -2752,14 +2750,14 @@
       if (docKey === 'privacy') {
         return {
           title: '隐私政策',
-          meta: `更新日期：${compliance.privacyUpdatedAt || '待补充'}`,
+          meta: `更新日期：${compliance.privacyUpdatedAt || '更新中'}`,
           sections: compliance.privacySections || []
         };
       }
       if (docKey === 'terms') {
         return {
           title: '用户协议',
-          meta: `更新日期：${compliance.termsUpdatedAt || '待补充'}`,
+          meta: `更新日期：${compliance.termsUpdatedAt || '更新中'}`,
           sections: compliance.termsSections || []
         };
       }
@@ -2772,7 +2770,7 @@
               title: '站点主体公示',
               paragraphs: [
                 ...(compliance.subjectInfo || []),
-                compliance.icpLabel || '备案号：待补充'
+                compliance.icpLabel || '备案信息更新中'
               ]
             }
           ]
@@ -3167,7 +3165,7 @@
         isNormal,
         pattern: TYPE_PATTERN_TEXT[code] || null,
         kicker: isNormal ? '标准人格' : '特殊人格',
-        meta: isNormal ? `模板 ${TYPE_PATTERN_TEXT[code]}` : '隐藏 / 彩蛋 / 兜底人格'
+        meta: isNormal ? `维度画像 ${TYPE_PATTERN_TEXT[code]}` : '隐藏 / 彩蛋 / 兜底人格'
       };
     }
 
@@ -3642,7 +3640,7 @@
         reasons.push({
           title: '标准人格库没有完全接住你',
           badge: `最高仅 ${result.bestNormal.similarity}%`,
-          body: `你的 15 维画像没有明显落到某个标准模板上，所以系统启用了 HHHH 兜底。离你最近的常规类型是 ${referenceType.code}（${referenceType.cn}）。`
+          body: `你的 15 维画像没有明显落到某个标准画像上，所以系统启用了 HHHH 兜底。离你最近的常规类型是 ${referenceType.code}（${referenceType.cn}）。`
         });
       }
 
@@ -3656,7 +3654,7 @@
 
         return {
           title: dimensionMeta[dim].name,
-          badge: `你是 ${actualLevel}（${score}分） · 模板 ${targetLevel}`,
+          badge: `你是 ${actualLevel}（${score}分） · 目标档位 ${targetLevel}`,
           body: `${DIM_EXPLANATIONS[dim][actualLevel]} 这一维与你的目标类型画像高度贴合。`,
           diff,
           confidence
