@@ -15,3 +15,7 @@ share-preview*.png
 .env
 .env.*
 !.env.example
+
+# Local analytics storage
+data/*.json
+data/*.tmp

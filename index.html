@@ -362,6 +362,12 @@
       justify-content: flex-end;
       gap: 12px;
     }
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
 
     button {
       border: 0;
@@ -960,10 +966,13 @@
       border-radius: 18px;
       padding: 18px;
       background: linear-gradient(180deg, #ffffff, #f7fbf8);
-      display: grid;
+      display: none;
       grid-template-columns: minmax(0, 1fr) 132px;
       gap: 18px;
       align-items: center;
+    }
+    .result-share.is-exporting .share-footer {
+      display: grid;
     }
     .share-footer-copy {
       display: grid;
@@ -1000,6 +1009,23 @@
       border-radius: 12px;
       display: block;
     }
+    .share-sheet {
+      max-width: min(720px, 100%);
+    }
+    .share-preview-stage {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: linear-gradient(180deg, #fbfefb, #f1f8f3);
+    }
+    .share-preview-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      background: #fff;
+      -webkit-touch-callout: default;
+    }
     .library-wrap {
       margin-top: 22px;
       padding: 22px;
@@ -1024,6 +1050,12 @@
       line-height: 1.8;
       max-width: 720px;
       margin-top: 10px;
+    }
+    .library-note {
+      margin-top: 10px;
+      color: var(--accent-strong);
+      font-size: 13px;
+      line-height: 1.8;
     }
     .library-layout {
       display: grid;
@@ -1097,6 +1129,12 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
+    }
+    .library-detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .author-box {
@@ -1177,6 +1215,12 @@
       .library-detail-top,
       .share-footer { grid-template-columns: 1fr; }
       .action-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .library-layout:not(.is-mobile-detail) .library-detail {
+        display: none;
+      }
+      .library-layout.is-mobile-detail .library-grid {
+        display: none;
+      }
     }
 
 @media (max-width: 860px) {
@@ -1294,7 +1338,8 @@
       .guide-actions {
         justify-content: stretch;
       }
-      .guide-actions button {
+      .guide-actions button,
+      .guide-actions .btn-link {
         width: 100%;
       }
       .question-title { font-size: 15px; }
@@ -1345,12 +1390,12 @@
             <div class="hero-actions hero-actions-single">
               <button id="startBtn" class="btn-primary">开始测试</button>
               <button id="openLibraryBtn" class="btn-secondary">人格图鉴</button>
+              <button id="latestResultBtn" class="btn-secondary" hidden>我的最新测试结果</button>
               <button id="installBtn" class="btn-secondary">保存到主屏幕</button>
             </div>
-            <div class="install-inline-note" id="installText">微信扫码打开也能保存到主屏幕，点按钮看教程。</div>
+            <div class="install-inline-note" id="installText">支持保存到主屏幕和离线打开，点按钮查看安装步骤。</div>
           </div>
           <div class="pixel-board" aria-hidden="true">
-            <div class="pixel-board-top">Pixel Poster</div>
             <svg class="pixel-logo" viewBox="0 0 230 70" role="presentation" focusable="false">
               <rect x="0" y="0" width="8" height="8" class="accent" /><rect x="10" y="0" width="8" height="8" class="accent" /><rect x="20" y="0" width="8" height="8" class="accent" /><rect x="30" y="0" width="8" height="8" class="accent" /><rect x="40" y="0" width="8" height="8" class="accent" />
               <rect x="0" y="10" width="8" height="8" /><rect x="0" y="20" width="8" height="8" />
@@ -1376,9 +1421,6 @@
           </div>
         </div>
         <div class="hero-meta">
-          <span id="versionOwner">
-            当前版本：你的自定义版
-          </span>
           <span>
             原作者：
             <a href="https://space.bilibili.com/417038183">B站@蛆肉儿串儿</a>
@@ -1400,7 +1442,7 @@
           <div>
             <div class="eyebrow">Add To Home Screen</div>
             <h2 id="guideTitle">把 SBTI 保存到主屏幕</h2>
-            <p class="guide-lead">大多数人会从微信扫码进来，所以先按“微信里打开”的步骤走。切到浏览器后，再做安装会顺很多。</p>
+            <p class="guide-lead">如果你是从微信里打开，可以先按“微信里打开”的步骤走；如果已经在浏览器里，就直接按对应机型保存到主屏幕。</p>
           </div>
           <button id="closeGuideBtn" class="guide-close" type="button">关闭</button>
         </div>
@@ -1444,14 +1486,15 @@
           <div>
             <div class="eyebrow">Personality Index</div>
             <h2>人格图鉴 / 类型百科</h2>
-            <p class="library-sub">不用重做测试，也能先把所有人格设定翻一遍。点击左侧任意人格，会在右边展开完整介绍。</p>
+            <p class="library-sub">不用重做测试，也能先把所有人格设定翻一遍。移动端点击任意人格，会进入对应的人格详情页。</p>
+            <p class="library-note">本网站会匿名记录人格结果，预计会在 4.11 版本支持人格比例的统计。</p>
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button id="libraryStartBtn" class="btn-primary">开始测试</button>
             <button id="libraryBackBtn" class="btn-secondary">回到首页</button>
           </div>
         </div>
-        <div class="library-layout">
+        <div class="library-layout" id="libraryLayout">
           <div id="libraryGrid" class="library-grid"></div>
           <div class="library-detail">
             <div class="library-detail-top">
@@ -1461,6 +1504,10 @@
                 <div class="type-name" id="libraryTypeName">CTRL（拿捏者）</div>
                 <div class="match" id="libraryTypeMeta">模板人格</div>
                 <p id="libraryTypeIntro">人格图鉴会在这里显示该类型的一句话印象。</p>
+                <div class="library-detail-actions">
+                  <button id="libraryGridBackBtn" class="btn-secondary" type="button" hidden>全部人格</button>
+                  <button id="libraryResultBtn" class="btn-secondary" type="button" hidden>回到我的测试结果</button>
+                </div>
               </div>
             </div>
             <div class="analysis-box">
@@ -1539,7 +1586,7 @@
             <div id="exportStatus" class="action-status" aria-live="polite"></div>
             <div class="action-buttons">
               <button id="resultLibraryBtn" class="btn-secondary">人格图鉴</button>
-              <button id="saveImageBtn" class="btn-secondary">保存分享图</button>
+              <button id="saveImageBtn" class="btn-secondary">一键存图分享</button>
               <button id="restartBtn" class="btn-secondary">重新测试</button>
             </div>
           </div>
@@ -1591,14 +1638,33 @@
 
   </div>
 
-  
+  <div id="shareImageModal" class="guide-modal" hidden>
+    <div class="guide-backdrop" data-close-share="true"></div>
+    <div class="guide-sheet card share-sheet" role="dialog" aria-modal="true" aria-labelledby="sharePreviewTitle">
+      <div class="guide-sheet-top">
+        <div>
+          <div class="eyebrow">Share Image</div>
+          <h2 id="sharePreviewTitle">长按图片即可保存或转发</h2>
+          <p id="sharePreviewHint" class="guide-lead">图片生成后会显示在这里，微信里可以直接长按保存到相册。</p>
+        </div>
+        <button id="shareImageCloseBtn" class="guide-close" type="button">关闭</button>
+      </div>
+      <div class="share-preview-stage">
+        <img id="sharePreviewImage" class="share-preview-image" alt="测试结果分享图预览" />
+      </div>
+      <div class="guide-actions">
+        <a id="shareDownloadLink" class="btn-primary btn-link" href="#" download>下载图片</a>
+        <button id="shareImageDoneBtn" class="btn-secondary" type="button">我知道了</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const SITE_CONFIG = {
       documentTitle: '我的 SBTI 版本',
       introTitle: '这是我的 SBTI 版本。',
-      versionOwner: '当前版本：你的自定义版',
       deployInfo: '',
-      domainInfo: '正式域名：sbti.cyou',
+      domainInfo: '如有问题或合作请联系 sbti_ccc@163.com',
       analyticsEndpoint: '/api/result',
       analyticsVersion: 'sbti-web-v1'
     };
@@ -2320,7 +2386,8 @@
       previewMode: false,
       restoredFromCache: false,
       lastResult: null,
-      activeLibraryCode: LIBRARY_TYPE_CODES[0]
+      activeLibraryCode: LIBRARY_TYPE_CODES[0],
+      libraryMobileDetail: false
     };
 
     const screens = {
@@ -2342,12 +2409,16 @@
     const top3List = document.getElementById('top3List');
     const whyList = document.getElementById('whyList');
     const libraryGrid = document.getElementById('libraryGrid');
+    const libraryLayout = document.getElementById('libraryLayout');
     const libraryImage = document.getElementById('libraryImage');
     const libraryTypeKicker = document.getElementById('libraryTypeKicker');
     const libraryTypeName = document.getElementById('libraryTypeName');
     const libraryTypeMeta = document.getElementById('libraryTypeMeta');
     const libraryTypeIntro = document.getElementById('libraryTypeIntro');
     const libraryTypeDesc = document.getElementById('libraryTypeDesc');
+    const latestResultBtn = document.getElementById('latestResultBtn');
+    const libraryGridBackBtn = document.getElementById('libraryGridBackBtn');
+    const libraryResultBtn = document.getElementById('libraryResultBtn');
     const installBtn = document.getElementById('installBtn');
     const installText = document.getElementById('installText');
     const installGuide = document.getElementById('installGuide');
@@ -2355,11 +2426,16 @@
     const guideInstallBtn = document.getElementById('guideInstallBtn');
     const closeGuideBtn = document.getElementById('closeGuideBtn');
     const guideDoneBtn = document.getElementById('guideDoneBtn');
+    const shareImageModal = document.getElementById('shareImageModal');
+    const sharePreviewImage = document.getElementById('sharePreviewImage');
+    const shareDownloadLink = document.getElementById('shareDownloadLink');
+    const sharePreviewHint = document.getElementById('sharePreviewHint');
+    const shareImageCloseBtn = document.getElementById('shareImageCloseBtn');
+    const shareImageDoneBtn = document.getElementById('shareImageDoneBtn');
 
     function applySiteConfig() {
       document.title = SITE_CONFIG.documentTitle;
       document.getElementById('introTitle').textContent = SITE_CONFIG.introTitle;
-      document.getElementById('versionOwner').textContent = SITE_CONFIG.versionOwner;
       const deployInfoEl = document.getElementById('deployInfo');
       if (SITE_CONFIG.deployInfo) {
         deployInfoEl.textContent = SITE_CONFIG.deployInfo;
@@ -2368,7 +2444,14 @@
         deployInfoEl.textContent = '';
         deployInfoEl.hidden = true;
       }
-      document.getElementById('domainInfo').textContent = SITE_CONFIG.domainInfo;
+      const domainInfoEl = document.getElementById('domainInfo');
+      if (SITE_CONFIG.domainInfo) {
+        domainInfoEl.textContent = SITE_CONFIG.domainInfo;
+        domainInfoEl.hidden = false;
+      } else {
+        domainInfoEl.textContent = '';
+        domainInfoEl.hidden = true;
+      }
       const mobileTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
       if (mobileTitle) mobileTitle.setAttribute('content', SITE_CONFIG.documentTitle);
     }
@@ -2458,6 +2541,18 @@
       return new URLSearchParams(window.location.search);
     }
 
+    function readSavedSession() {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : null;
+      } catch (error) {
+        console.warn('读取本地缓存失败', error);
+        return null;
+      }
+    }
+
     function normalizeAnswers(answers) {
       if (!answers || typeof answers !== 'object') return {};
       return Object.fromEntries(
@@ -2472,8 +2567,37 @@
       return Object.keys(app.answers).length > 0;
     }
 
+    function hasCompletedCachedResult() {
+      return Boolean(readSavedSession()?.completed);
+    }
+
     function restoreQuestionsByIds(questionIds = []) {
       return questionIds.map((questionId) => QUESTION_MAP[questionId]).filter(Boolean);
+    }
+
+    function isCompactLibraryLayout() {
+      return window.matchMedia('(max-width: 860px)').matches;
+    }
+
+    function updateLatestResultButtons() {
+      const hasLatestResult = Boolean(app.lastResult?.finalType?.code) || hasCompletedCachedResult();
+      latestResultBtn.hidden = !hasLatestResult;
+      libraryResultBtn.hidden = !hasLatestResult;
+    }
+
+    function updateLibraryChrome() {
+      const showMobileDetail = screens.library.classList.contains('active')
+        && isCompactLibraryLayout()
+        && app.libraryMobileDetail;
+
+      libraryLayout.classList.toggle('is-mobile-detail', showMobileDetail);
+      libraryGridBackBtn.hidden = !showMobileDetail;
+      updateLatestResultButtons();
+    }
+
+    function syncModalState() {
+      const anyModalOpen = !installGuide.hidden || !shareImageModal.hidden;
+      document.body.classList.toggle('modal-open', anyModalOpen);
     }
 
     function showScreen(name, options = {}) {
@@ -2482,14 +2606,18 @@
         el.classList.toggle('active', key === name);
       });
       if (syncUrl) {
+        const routeType = name === 'result'
+          ? (type || app.lastResult?.finalType?.code || null)
+          : name === 'library'
+            ? (type || null)
+            : null;
         updateUrlState({
           screen: name === 'intro' ? null : name,
-          type: (name === 'library' || name === 'result')
-            ? (type || app.activeLibraryCode || app.lastResult?.finalType?.code || null)
-            : null
+          type: routeType
         });
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateLibraryChrome();
     }
 
     function shuffle(array) {
@@ -2551,7 +2679,10 @@
 
       libraryGrid.querySelectorAll('[data-type-code]').forEach((button) => {
         button.addEventListener('click', () => {
-          setLibraryType(button.dataset.typeCode, { syncUrl: true });
+          setLibraryType(button.dataset.typeCode, {
+            syncUrl: true,
+            focusDetail: isCompactLibraryLayout()
+          });
         });
       });
     }
@@ -2579,20 +2710,31 @@
     }
 
     function setLibraryType(code, options = {}) {
-      const { syncUrl = false } = options;
+      const { syncUrl = false, focusDetail = false } = options;
       if (!TYPE_LIBRARY[code]) return;
       app.activeLibraryCode = code;
+      app.libraryMobileDetail = Boolean(focusDetail) && isCompactLibraryLayout();
       renderLibraryGrid();
       renderLibraryDetail(code);
       if (syncUrl && screens.library.classList.contains('active')) {
         updateUrlState({ screen: 'library', type: code });
       }
+      updateLibraryChrome();
+      if (app.libraryMobileDetail) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     function openLibrary(code = app.lastResult?.finalType?.code || app.activeLibraryCode || LIBRARY_TYPE_CODES[0], options = {}) {
-      const { syncUrl = true } = options;
-      setLibraryType(code, { syncUrl: false });
-      showScreen('library', { syncUrl, type: code });
+      const { syncUrl = true, focusDetail = false } = options;
+      setLibraryType(code, { syncUrl: false, focusDetail });
+      showScreen('library', { syncUrl: false });
+      if (syncUrl) {
+        updateUrlState({
+          screen: 'library',
+          type: (app.libraryMobileDetail || !isCompactLibraryLayout()) ? code : null
+        });
+      }
     }
 
     function isStandaloneMode() {
@@ -2616,8 +2758,8 @@
         guideStatus.textContent = '现在已经能像 App 一样从主屏幕打开了，离线时也能继续进入测试和人格图鉴。';
       } else if (isWeChat()) {
         guideStatus.textContent = canDirectInstall
-          ? '你现在大概率是在微信里打开。先用右上角菜单切到浏览器，再回来点下方“直接安装”会更省事。'
-          : '你现在大概率是在微信里打开。先用右上角菜单切到浏览器，再按下面教程保存到主屏幕。';
+          ? '如果你现在是在微信里打开，先用右上角菜单切到浏览器，再回来点下方“直接安装”会更省事。'
+          : '如果你现在是在微信里打开，先用右上角菜单切到浏览器，再按下面教程保存到主屏幕。';
       } else if (canDirectInstall) {
         guideStatus.textContent = '当前浏览器支持一键安装。你可以直接点下方按钮，也可以按教程手动保存到主屏幕。';
       } else if (isIosSafari()) {
@@ -2638,9 +2780,9 @@
       }
       installBtn.textContent = '保存到主屏幕';
       if (isWeChat()) {
-        installText.textContent = '大多数人会从微信扫码进来，点按钮看教程，再切到浏览器保存到主屏幕。';
+        installText.textContent = '如果你现在是在微信里打开，点按钮看教程，先切到浏览器再保存到主屏幕。';
       } else if (deferredInstallPrompt) {
-        installText.textContent = '当前浏览器支持直接安装，不过我也给你准备了手动教程。';
+        installText.textContent = '当前浏览器支持直接安装，也可以先看教程再操作。';
       } else if (isIosSafari()) {
         installText.textContent = 'iPhone 里直接点按钮看教程，按“分享 -> 添加到主屏幕”就行。';
       } else {
@@ -2652,12 +2794,12 @@
     function openInstallGuide() {
       updateInstallGuide();
       installGuide.hidden = false;
-      document.body.classList.add('modal-open');
+      syncModalState();
     }
 
     function closeInstallGuide() {
       installGuide.hidden = true;
-      document.body.classList.remove('modal-open');
+      syncModalState();
     }
 
     async function installApp() {
@@ -2729,6 +2871,7 @@
       try {
         if (!hasPersistableSession()) {
           window.localStorage.removeItem(STORAGE_KEY);
+          updateLatestResultButtons();
           return;
         }
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -2739,32 +2882,45 @@
           completed: isSessionComplete(),
           savedAt: Date.now()
         }));
+        updateLatestResultButtons();
       } catch (error) {
         console.warn('保存本地进度失败', error);
       }
     }
 
-    function restoreAppState() {
+    function hydrateSavedSession(savedSession) {
+      if (!savedSession) return false;
+      const restoredQuestions = restoreQuestionsByIds(savedSession.shuffledQuestionIds);
+      if (!restoredQuestions.length) return false;
+
+      app.previewMode = Boolean(savedSession.previewMode);
+      app.answers = normalizeAnswers(savedSession.answers);
+      app.shuffledQuestions = restoredQuestions;
+      app.restoredFromCache = true;
+      app.lastResult = isSessionComplete() ? computeResult() : null;
+      return true;
+    }
+
+    function restoreAppState(options = {}) {
+      const { deferCompleted = false, syncUrl = true, allowIncompleteTest = true } = options;
       try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (!raw) return false;
-
-        const parsed = JSON.parse(raw);
-        const restoredQuestions = restoreQuestionsByIds(parsed.shuffledQuestionIds);
-        if (!restoredQuestions.length) return false;
-
-        app.previewMode = Boolean(parsed.previewMode);
-        app.answers = normalizeAnswers(parsed.answers);
-        app.shuffledQuestions = restoredQuestions;
-        app.restoredFromCache = true;
+        const savedSession = readSavedSession();
+        if (!savedSession) return false;
+        if (!hydrateSavedSession(savedSession)) return false;
 
         if (isSessionComplete()) {
-          renderResult({ restored: true });
-        } else {
+          if (deferCompleted) {
+            updateLatestResultButtons();
+            return 'completed';
+          }
+          renderResult({ restored: true, syncUrl });
+        } else if (allowIncompleteTest) {
           renderQuestions();
-          showScreen('test');
+          showScreen('test', { syncUrl });
+        } else {
+          updateLatestResultButtons();
         }
-        return true;
+        return isSessionComplete() ? 'completed' : 'incomplete';
       } catch (error) {
         console.warn('恢复本地进度失败', error);
         try {
@@ -2772,6 +2928,7 @@
         } catch (removeError) {
           console.warn('清理损坏缓存失败', removeError);
         }
+        updateLatestResultButtons();
         return false;
       }
     }
@@ -3064,6 +3221,12 @@
       })));
     }
 
+    function waitForNextFrame() {
+      return new Promise((resolve) => {
+        window.requestAnimationFrame(() => resolve());
+      });
+    }
+
     function loadHtml2Canvas() {
       if (window.html2canvas) return Promise.resolve(window.html2canvas);
 
@@ -3091,6 +3254,23 @@
       return `${versionName}-${typeCode}.png`;
     }
 
+    function openShareImageModal(dataUrl) {
+      sharePreviewImage.src = dataUrl;
+      sharePreviewImage.alt = `${SITE_CONFIG.documentTitle} 分享图预览`;
+      shareDownloadLink.href = dataUrl;
+      shareDownloadLink.download = buildExportFilename();
+      sharePreviewHint.textContent = isWeChat()
+        ? '图片已经准备好了，微信里直接长按这张图就能保存到相册。'
+        : '图片已经准备好了，长按预览图可保存，也可以直接点下方按钮下载。';
+      shareImageModal.hidden = false;
+      syncModalState();
+    }
+
+    function closeShareImageModal() {
+      shareImageModal.hidden = true;
+      syncModalState();
+    }
+
     async function downloadResultImage() {
       if (!app.lastResult) {
         setActionStatus('先生成一次结果，再保存分享图。', true);
@@ -3101,8 +3281,11 @@
       setActionStatus('正在生成分享图，请稍等...');
 
       try {
+        resultCapture.classList.add('is-exporting');
+        await waitForNextFrame();
         await waitForImages(resultCapture);
         const html2canvas = await loadHtml2Canvas();
+        await waitForNextFrame();
         const canvas = await html2canvas(resultCapture, {
           backgroundColor: '#ffffff',
           useCORS: true,
@@ -3112,30 +3295,28 @@
           scale: Math.min(2, Math.max(1, window.devicePixelRatio || 1))
         });
 
-        const pngBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1));
-        if (!pngBlob) {
-          throw new Error('长图导出失败');
+        const dataUrl = canvas.toDataURL('image/png');
+        if (!dataUrl.startsWith('data:image/png')) {
+          throw new Error('分享图格式异常');
         }
 
-        const downloadUrl = URL.createObjectURL(pngBlob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = buildExportFilename();
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(downloadUrl);
-        setActionStatus('分享图已生成，通常会出现在浏览器默认下载目录。');
+        openShareImageModal(dataUrl);
+        setActionStatus(
+          isWeChat()
+            ? '分享图已生成，长按预览图就能保存到相册。'
+            : '分享图已生成，长按预览图可保存，也可以点下方按钮下载。'
+        );
       } catch (error) {
         console.error(error);
         setActionStatus('分享图生成失败了，刷新页面后再试一次。', true);
       } finally {
+        resultCapture.classList.remove('is-exporting');
         saveImageBtn.disabled = false;
       }
     }
 
     function renderResult(options = {}) {
-      const { restored = false } = options;
+      const { restored = false, syncUrl = true } = options;
       const result = computeResult();
       const type = result.finalType;
       app.lastResult = result;
@@ -3176,7 +3357,8 @@
           ? '已恢复上次测试结果，可直接继续查看或保存长图。'
           : '结果已保存在当前浏览器，下次打开还能继续查看。'
       );
-      showScreen('result', { type: type.code });
+      updateLatestResultButtons();
+      showScreen('result', { syncUrl, type: type.code });
     }
 
     function startTest(preview = false, options = {}) {
@@ -3184,6 +3366,7 @@
       app.previewMode = preview;
       app.restoredFromCache = false;
       app.lastResult = null;
+      app.libraryMobileDetail = false;
       app.answers = {};
       const shuffledRegular = shuffle(questions);
       const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
@@ -3196,17 +3379,63 @@
       showScreen('test', { syncUrl });
     }
 
+    function openLatestResult(options = {}) {
+      const { syncUrl = true } = options;
+      if (app.lastResult?.finalType?.code && isSessionComplete()) {
+        renderResult({ restored: true, syncUrl });
+        return true;
+      }
+
+      return restoreAppState({ deferCompleted: false, syncUrl, allowIncompleteTest: false }) === 'completed';
+    }
+
     function applyInitialRoute() {
       const params = getCurrentUrlParams();
       const screen = params.get('screen');
       const type = params.get('type');
+      const hasType = type && TYPE_LIBRARY[type];
 
       if (screen === 'library') {
-        openLibrary(type && TYPE_LIBRARY[type] ? type : app.activeLibraryCode, { syncUrl: false });
+        openLibrary(hasType ? type : app.activeLibraryCode, {
+          syncUrl: false,
+          focusDetail: Boolean(hasType) && isCompactLibraryLayout()
+        });
         return true;
       }
       if (screen === 'test') {
+        const restored = restoreAppState({ deferCompleted: true, syncUrl: false, allowIncompleteTest: true });
+        if (restored === 'incomplete') return true;
         startTest(false, { syncUrl: false });
+        return true;
+      }
+      if (screen === 'result') {
+        if (openLatestResult({ syncUrl: false })) return true;
+        return false;
+      }
+      return false;
+    }
+
+    function showLibraryGrid() {
+      app.libraryMobileDetail = false;
+      updateLibraryChrome();
+      updateUrlState({ screen: 'library', type: null });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleViewportChange() {
+      if (!isCompactLibraryLayout()) {
+        app.libraryMobileDetail = false;
+      }
+      updateLibraryChrome();
+    }
+
+    function closeTopMostModal() {
+      if (!shareImageModal.hidden) {
+        closeShareImageModal();
+        return true;
+      }
+      if (!installGuide.hidden) {
+        closeInstallGuide();
         return true;
       }
       return false;
@@ -3219,33 +3448,51 @@
 
     const routed = applyInitialRoute();
     if (!routed) {
-      restoreAppState();
+      const restored = restoreAppState({ deferCompleted: true, syncUrl: false, allowIncompleteTest: true });
+      if (restored !== 'incomplete') {
+        showScreen('intro', { syncUrl: false });
+      }
+    } else if (!app.lastResult) {
+      restoreAppState({ deferCompleted: true, syncUrl: false, allowIncompleteTest: false });
     }
+    updateLatestResultButtons();
+    updateLibraryChrome();
 
     document.getElementById('startBtn').addEventListener('click', () => startTest(false));
     document.getElementById('openLibraryBtn').addEventListener('click', () => openLibrary());
+    latestResultBtn.addEventListener('click', () => openLatestResult());
     document.getElementById('libraryStartBtn').addEventListener('click', () => startTest(false));
     document.getElementById('libraryBackBtn').addEventListener('click', () => showScreen('intro'));
+    libraryGridBackBtn.addEventListener('click', showLibraryGrid);
+    libraryResultBtn.addEventListener('click', () => openLatestResult());
     document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
     document.getElementById('submitBtn').addEventListener('click', () => {
       if (showIncompleteQuestionsWarning()) return;
       renderResult();
     });
     document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
-    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code));
+    document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code, { focusDetail: isCompactLibraryLayout() }));
     saveImageBtn.addEventListener('click', downloadResultImage);
     installBtn.addEventListener('click', openInstallGuide);
     guideInstallBtn.addEventListener('click', installApp);
     closeGuideBtn.addEventListener('click', closeInstallGuide);
     guideDoneBtn.addEventListener('click', closeInstallGuide);
+    shareImageCloseBtn.addEventListener('click', closeShareImageModal);
+    shareImageDoneBtn.addEventListener('click', closeShareImageModal);
     installGuide.addEventListener('click', (event) => {
       if (event.target.dataset.closeGuide === 'true') {
         closeInstallGuide();
       }
     });
+    shareImageModal.addEventListener('click', (event) => {
+      if (event.target.dataset.closeShare === 'true') {
+        closeShareImageModal();
+      }
+    });
+    window.addEventListener('resize', handleViewportChange);
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !installGuide.hidden) {
-        closeInstallGuide();
+      if (event.key === 'Escape') {
+        closeTopMostModal();
       }
     });
   </script>
