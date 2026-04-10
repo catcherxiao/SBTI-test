@@ -875,6 +875,12 @@
       background: linear-gradient(180deg, rgba(127,165,134,0.12), rgba(127,165,134,0.01));
       pointer-events: none;
     }
+    .poster-picture {
+      width: 100%;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
     .poster-image {
       width: 100%;
       min-height: 220px;
@@ -885,6 +891,7 @@
       position: relative;
       z-index: 1;
     }
+    .poster-box.no-image .poster-picture,
     .poster-box.no-image .poster-image {
       display: none;
     }
@@ -1276,6 +1283,11 @@
       display: block;
       object-fit: contain;
     }
+    .library-detail-picture {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
     .library-detail-copy p {
       margin: 10px 0 0;
       color: var(--muted);
@@ -1504,6 +1516,10 @@
         padding: 16px;
         border-radius: 16px;
       }
+      .poster-picture {
+        min-height: 220px;
+        max-height: 360px;
+      }
       .poster-image {
         min-height: 220px;
         max-height: 360px;
@@ -1658,7 +1674,10 @@
           <div class="library-detail">
             <div class="library-detail-top">
               <div class="library-detail-media" id="libraryImageFrame">
-                <img id="libraryImage" class="library-detail-image" alt="人格图鉴插图" />
+                <picture class="library-detail-picture">
+                  <source id="libraryImageWebp" type="image/webp" />
+                  <img id="libraryImage" class="library-detail-image" alt="人格图鉴插图" />
+                </picture>
               </div>
               <div class="library-detail-copy">
                 <div class="type-kicker" id="libraryTypeKicker">人格档案</div>
@@ -1706,7 +1725,10 @@
           <div class="result-share" id="resultCapture">
             <div class="result-top">
               <div class="poster-box" id="posterBox">
-                <img id="posterImage" class="poster-image" alt="人格结果图" />
+                <picture class="poster-picture">
+                  <source id="posterImageWebp" type="image/webp" />
+                  <img id="posterImage" class="poster-image" alt="人格结果图" />
+                </picture>
                 <div id="posterCaption" class="poster-caption">怎么样，被我拿捏了吧？</div>
               </div>
 
@@ -2679,7 +2701,10 @@
     const libraryGrid = document.getElementById('libraryGrid');
     const libraryLayout = document.getElementById('libraryLayout');
     const libraryImageFrame = document.getElementById('libraryImageFrame');
+    const libraryImageWebp = document.getElementById('libraryImageWebp');
     const libraryImage = document.getElementById('libraryImage');
+    const posterImageWebp = document.getElementById('posterImageWebp');
+    const posterImage = document.getElementById('posterImage');
     const libraryTypeKicker = document.getElementById('libraryTypeKicker');
     const libraryTypeName = document.getElementById('libraryTypeName');
     const libraryTypeMeta = document.getElementById('libraryTypeMeta');
@@ -2843,6 +2868,29 @@
     function normalizePath(pathname = '/') {
       const compact = `/${String(pathname || '/').replace(/^\/+|\/+$/g, '')}`.replace(/\/{2,}/g, '/');
       return compact === '/' ? '/' : `${compact}/`;
+    }
+
+    function getWebpAssetPath(assetPath = '') {
+      return String(assetPath || '').replace(/\.(png|jpe?g)$/i, '.webp');
+    }
+
+    function setResponsiveImage(sourceEl, imageEl, assetPath, altText) {
+      if (!assetPath) {
+        if (sourceEl) sourceEl.removeAttribute('srcset');
+        imageEl.removeAttribute('src');
+        imageEl.alt = '';
+        return;
+      }
+
+      const webpPath = getWebpAssetPath(assetPath);
+      if (sourceEl && webpPath && webpPath !== assetPath) {
+        sourceEl.srcset = webpPath;
+      } else if (sourceEl) {
+        sourceEl.removeAttribute('srcset');
+      }
+
+      imageEl.src = assetPath;
+      imageEl.alt = altText;
     }
 
     function buildPathFromRoute(params = {}) {
@@ -3201,12 +3249,10 @@
 
       const imageSrc = TYPE_IMAGES[type.code];
       if (imageSrc) {
-        libraryImage.src = imageSrc;
-        libraryImage.alt = `${type.code}（${type.cn}）`;
+        setResponsiveImage(libraryImageWebp, libraryImage, imageSrc, `${type.code}（${type.cn}）`);
         libraryImageFrame.hidden = false;
       } else {
-        libraryImage.removeAttribute('src');
-        libraryImage.alt = '';
+        setResponsiveImage(libraryImageWebp, libraryImage, '', '');
         libraryImageFrame.hidden = true;
       }
     }
@@ -3851,15 +3897,12 @@
         : '本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。你可以笑，但别太当真。';
 
       const posterBox = document.getElementById('posterBox');
-      const posterImage = document.getElementById('posterImage');
       const imageSrc = TYPE_IMAGES[type.code];
       if (imageSrc) {
-        posterImage.src = imageSrc;
-        posterImage.alt = `${type.code}（${type.cn}）`;
+        setResponsiveImage(posterImageWebp, posterImage, imageSrc, `${type.code}（${type.cn}）`);
         posterBox.classList.remove('no-image');
       } else {
-        posterImage.removeAttribute('src');
-        posterImage.alt = '';
+        setResponsiveImage(posterImageWebp, posterImage, '', '');
         posterBox.classList.add('no-image');
       }
 

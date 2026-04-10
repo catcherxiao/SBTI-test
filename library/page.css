@@ -171,6 +171,12 @@ img {
   overflow: hidden;
 }
 
+.hero-media picture {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .hero-media img {
   width: 100%;
   height: 100%;
@@ -264,6 +270,12 @@ img {
     radial-gradient(circle at top right, rgba(149, 185, 157, 0.16), transparent 34%),
     linear-gradient(180deg, #ffffff, #f5faf6);
   overflow: hidden;
+}
+
+.type-card-thumb picture {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .type-card-thumb img {

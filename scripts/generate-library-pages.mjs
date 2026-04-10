@@ -74,6 +74,22 @@ function normalizeAssetPath(assetPath = '') {
   return `/${assetPath.replace(/^\.\//, '')}`;
 }
 
+function getWebpAssetPath(assetPath = '') {
+  return normalizeAssetPath(assetPath).replace(/\.(png|jpe?g)$/i, '.webp');
+}
+
+function buildPictureMarkup(assetPath, altText, options = {}) {
+  const { loading = 'lazy', eager = false } = options;
+  const originalPath = normalizeAssetPath(assetPath);
+  const webpPath = getWebpAssetPath(assetPath);
+  const fetchpriority = eager ? ' fetchpriority="high"' : '';
+
+  return `<picture>
+        <source srcset="${webpPath}" type="image/webp" />
+        <img src="${originalPath}" alt="${escapeHtml(altText)}" loading="${loading}"${fetchpriority} />
+      </picture>`;
+}
+
 function buildSummary(type, isNormal) {
   return `${type.code}（${type.cn}）是 ${siteName}里的${isNormal ? '标准人格' : '特殊人格'}之一。这个页面整理了它的一句话印象、完整设定、${isNormal ? '维度画像' : '触发逻辑'}与相近类型，方便你在不重做测试的情况下直接了解这个人格的整体气质与典型表现。`;
 }
@@ -214,7 +230,7 @@ function buildDetailPage(code) {
       name: title,
       description,
       url: `${siteUrl}${canonicalPath}`,
-      primaryImageOfPage: imagePath ? `${siteUrl}/${imagePath.replace(/^\.\//, '')}` : undefined
+      primaryImageOfPage: imagePath ? `${siteUrl}${normalizeAssetPath(imagePath)}` : undefined
     }
   ];
 
@@ -244,7 +260,7 @@ function buildDetailPage(code) {
         </div>
       </div>
       <div class="hero-media">
-        <img src="${normalizeAssetPath(imagePath)}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="eager" fetchpriority="high" />
+        ${buildPictureMarkup(imagePath, `${type.code}（${type.cn}）人格图鉴插图`, { loading: 'eager', eager: true })}
       </div>
     </div>
   </header>`;
@@ -363,7 +379,7 @@ function buildLibraryIndex() {
         </div>
       </div>
       <div class="hero-media">
-        <img src="/image/CTRL.png" alt="SBTI 人格图鉴封面示意图" loading="eager" fetchpriority="high" />
+        ${buildPictureMarkup('/image/CTRL.png', 'SBTI 人格图鉴封面示意图', { loading: 'eager', eager: true })}
       </div>
     </div>
   </header>`;
@@ -374,7 +390,7 @@ function buildLibraryIndex() {
     return `
       <a class="type-card" href="/library/${encodeTypePath(code)}/">
         <div class="type-card-thumb">
-          <img src="${normalizeAssetPath(TYPE_IMAGES[code])}" alt="${escapeHtml(type.code)}（${escapeHtml(type.cn)}）人格图鉴插图" loading="lazy" />
+          ${buildPictureMarkup(TYPE_IMAGES[code], `${type.code}（${type.cn}）人格图鉴插图`)}
         </div>
         <div class="kicker">${isNormal ? '标准人格' : '特殊人格'}</div>
         <strong>${escapeHtml(type.code)}（${escapeHtml(type.cn)}）</strong>

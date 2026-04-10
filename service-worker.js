@@ -1,12 +1,5 @@
-const CACHE_NAME = 'sbti-static-v4';
-const CORE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/apple-touch-icon.png',
-  '/icons/share-qr.png',
+const CACHE_NAME = 'sbti-static-v5';
+const IMAGE_ASSETS = [
   '/image/ATM-er.png',
   '/image/BOSS.png',
   '/image/CTRL.png',
@@ -34,6 +27,18 @@ const CORE_ASSETS = [
   '/image/THIN-K.png',
   '/image/WOC.png',
   '/image/ZZZZ.png'
+];
+const WEBP_IMAGE_ASSETS = IMAGE_ASSETS.map((asset) => asset.replace(/\.(png|jpe?g)$/i, '.webp'));
+const CORE_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/apple-touch-icon.png',
+  '/icons/share-qr.png',
+  ...IMAGE_ASSETS,
+  ...WEBP_IMAGE_ASSETS
 ];
 
 self.addEventListener('install', (event) => {
