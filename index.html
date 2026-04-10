@@ -2710,6 +2710,7 @@
     const footerIcpText = document.getElementById('footerIcpText');
     const footerIcpLink = document.getElementById('footerIcpLink');
     const complianceTriggers = document.querySelectorAll('[data-compliance-doc]');
+    const saveImageDefaultLabel = saveImageBtn.textContent;
 
     function applySiteConfig() {
       document.getElementById('introTitle').textContent = SITE_CONFIG.introTitle;
@@ -2810,12 +2811,12 @@
       if (!doc) return;
       renderComplianceDocument(doc);
       complianceModal.hidden = false;
-      document.body.classList.add('modal-open');
+      syncModalState();
     }
 
     function closeComplianceModal() {
       complianceModal.hidden = true;
-      document.body.classList.remove('modal-open');
+      syncModalState();
     }
 
     function setMetaContent(selector, content) {
@@ -3075,6 +3076,11 @@
       return Boolean(readSavedSession()?.completed);
     }
 
+    function hasIncompleteCachedSession() {
+      const savedSession = readSavedSession();
+      return Boolean(savedSession && !savedSession.completed);
+    }
+
     function restoreQuestionsByIds(questionIds = []) {
       return questionIds.map((questionId) => QUESTION_MAP[questionId]).filter(Boolean);
     }
@@ -3100,7 +3106,7 @@
     }
 
     function syncModalState() {
-      const anyModalOpen = !installGuide.hidden || !shareImageModal.hidden;
+      const anyModalOpen = !installGuide.hidden || !shareImageModal.hidden || !complianceModal.hidden;
       document.body.classList.toggle('modal-open', anyModalOpen);
     }
 
@@ -3782,7 +3788,18 @@
 
     function closeShareImageModal() {
       shareImageModal.hidden = true;
+      sharePreviewImage.removeAttribute('src');
+      shareDownloadLink.href = '#';
       syncModalState();
+    }
+
+    function canStartFreshTest() {
+      const hasCurrentIncomplete = Object.keys(app.answers).length > 0 && !isSessionComplete();
+      if (!hasCurrentIncomplete && !hasIncompleteCachedSession()) {
+        return true;
+      }
+
+      return window.confirm('你还有一份没做完的测试进度。现在重新开始，会覆盖当前进度。要继续吗？');
     }
 
     async function downloadResultImage() {
@@ -3792,6 +3809,7 @@
       }
 
       saveImageBtn.disabled = true;
+      saveImageBtn.textContent = '正在生成...';
       setActionStatus('正在生成分享图，请稍等...');
 
       try {
@@ -3826,6 +3844,7 @@
       } finally {
         resultCapture.classList.remove('is-exporting');
         saveImageBtn.disabled = false;
+        saveImageBtn.textContent = saveImageDefaultLabel;
       }
     }
 
@@ -3876,13 +3895,18 @@
     }
 
     function startTest(preview = false, options = {}) {
-      const { syncUrl = true } = options;
+      const { syncUrl = true, confirmDiscard = false } = options;
+      if (confirmDiscard && !canStartFreshTest()) {
+        return;
+      }
       app.previewMode = preview;
       app.restoredFromCache = false;
       app.lastResult = null;
       app.libraryMobileDetail = false;
       app.libraryRouteType = null;
       app.answers = {};
+      closeShareImageModal();
+      setActionStatus('');
       const shuffledRegular = shuffle(questions);
       const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
       app.shuffledQuestions = [
@@ -3990,10 +4014,10 @@
     updateLatestResultButtons();
     updateLibraryChrome();
 
-    document.getElementById('startBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('startBtn').addEventListener('click', () => startTest(false, { confirmDiscard: true }));
     document.getElementById('openLibraryBtn').addEventListener('click', () => openLibrary());
     latestResultBtn.addEventListener('click', () => openLatestResult());
-    document.getElementById('libraryStartBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('libraryStartBtn').addEventListener('click', () => startTest(false, { confirmDiscard: true }));
     document.getElementById('libraryBackBtn').addEventListener('click', () => showScreen('intro'));
     libraryGridBackBtn.addEventListener('click', showLibraryGrid);
     libraryResultBtn.addEventListener('click', () => openLatestResult());
@@ -4002,7 +4026,7 @@
       if (showIncompleteQuestionsWarning()) return;
       renderResult();
     });
-    document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('restartBtn').addEventListener('click', () => startTest(false, { confirmDiscard: true }));
     document.getElementById('resultLibraryBtn').addEventListener('click', () => openLibrary(app.lastResult?.finalType?.code, { focusDetail: isCompactLibraryLayout(), routeToDetail: true }));
     saveImageBtn.addEventListener('click', downloadResultImage);
     installBtn.addEventListener('click', openInstallGuide);
