@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sbti-static-v5';
+const CACHE_NAME = 'sbti-static-v6';
 const IMAGE_ASSETS = [
   '/image/ATM-er.png',
   '/image/BOSS.png',
@@ -66,8 +66,10 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   const isSameOrigin = url.origin === self.location.origin;
   const isHtml2CanvasCdn = url.origin === 'https://cdn.jsdelivr.net';
+  const isApiRequest = isSameOrigin && url.pathname.startsWith('/api/');
 
   if (!isSameOrigin && !isHtml2CanvasCdn) return;
+  if (isApiRequest) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(
